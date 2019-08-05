@@ -1,47 +1,30 @@
-import cimRoutes from './cim'
-import ctmRoutes from './ctm'
-import csmRoutes from './csm'
-
-const routerView = {template: '<router-view></router-view>'};
 
 let routes = [
   {
     path: '/',
-    redirect: 'csm/index'
-
+    redirect: 'login'
   },
   {
-    path: '/cim',
+    path: '/login',
     meta: {
-      title: '卖品'
+      title: '慧影云排期展示首页'
     },
-    component: routerView,
-    name: '卖品',
-    redirect: 'cim/index',
-    children: cimRoutes
-
-  },
-  {
-    path: '/ctm',
+    component: (resolve) => require(['views/filmShow/login.vue'], resolve),
+    name: '慧影云排期展示首页'
+  },{
+    path: '/swiperList',
     meta: {
-      title: '票务'
+      title: '慧影云排期展示首页'
     },
-    component: routerView,
-    name: '票务',
-    redirect: 'ctm/index',
-    children: ctmRoutes
-
-  },
-  {
-    path: '/csm',
+    component: (resolve) => require(['views/filmShow/swiperList.vue'], resolve),
+    name: '慧影云排期展示首页'
+  },{
+    path: 'add',
     meta: {
-      title: '销售'
+      title: '慧影云排期展示首页'
     },
-    component: routerView,
-    name: '销售',
-    redirect: 'csm/index',
-    children: csmRoutes
-
+    component: (resolve) => require(['views/filmShow/add.vue'], resolve),
+    name: '慧影云排期展示首页'
   }
 ];
 
