@@ -19,7 +19,7 @@ let routes = [
     component: (resolve) => require(['views/filmShow/swiperList.vue'], resolve),
     name: '慧影云排期展示首页'
   },{
-    path: 'add',
+    path: '/add',
     meta: {
       title: '慧影云排期展示首页'
     },

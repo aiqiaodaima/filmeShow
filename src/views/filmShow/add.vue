@@ -32,8 +32,8 @@
               </swiper-slide>
             </swiper>
           </div>
-          <p class="address-p">地址： www.oristarclound.com/mvs/t1.jsp</p>
-          <p class="tip-p">模板编号</p>
+          <!-- <p class="address-p">地址： www.oristarclound.com/mvs/t1.jsp</p> -->
+          <!-- <p class="tip-p">模板编号</p> -->
         </li>
       </ul>
     </div>
@@ -143,6 +143,7 @@
   }
 
   .contain {
+    // height: 90vh;
     .header-title {
       display: flex;
       justify-content: center;
@@ -174,10 +175,10 @@
 
         .big-carousel {
           width: 100%;
-          margin: 1em;
+          margin: 0 1em;
 
           .single-carousel {
-            height: 600px;
+            height: 700px;
             overflow: hidden;
             border: 1px solid #333;
             background-color: rgb(10, 30, 45);

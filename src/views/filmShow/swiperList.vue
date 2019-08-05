@@ -5,24 +5,36 @@
         <span>慧影云排期展示首页</span>
       </p>
       <p class="right-header">
-        <span>当前终端编号</span>
-        <span>10929981</span>
+        <span>当前终端编号：</span>
+        <span>{{tenantId}}</span>
       </p>
       <p class="right-header">
-        <span>状态</span>
-        <span>启用</span>
+        <span>状态：</span>
+        <span style="color:blue">{{status}}</span>
       </p>
     </div>
     <div class="content-show">
       <ul class="out-carousel">
+      <el-row>
+        <el-col :span="8" v-for="(item,index) in arrList" :key="index">
+          <div class="big-carousel">
+            <div class="single-carousel">
+              <img :src="item.thumbnail" alt="" @click="goAddress(item.tCode)">
+            </div>
+            <p class="address-p" @click="goAddress(item.tCode)">地址： {{item.addressUrl}}</p>
+            <p class="tip-p">模板编号{{item.tCode}}</p>
+          </div>
+        </el-col>
+      </el-row>
+      <!-- <ul class="out-carousel">
         <li class="big-carousel" v-for="(item,index) in arrList" :key="index">
           <div class="single-carousel">
             <img :src="item.thumbnail" alt="">
           </div>
           <p class="address-p" @click="goAddress(item.tCode)">地址： {{item.addressUrl}}</p>
           <p class="tip-p">模板编号{{item.tCode}}</p>
-        </li>
-      </ul>
+        </li> -->
+      </ul> 
     </div>
   </div>
 </template>
@@ -30,25 +42,27 @@
   export default {
     data() {
       return {
-        arrList:[]
+        arrList: [],
+        status:1,
+        tenantId:""
       }
     },
     methods: {
       getList() {
-        let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal) 
-        // terminalInfo && this.$store.commit("ctmRemberTerminal",terminalInfo);
-        // console.log(this)
+        let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal)
         let httpObj = { // 获取轮播图的信息
           tenantId: terminalInfo.tenantId, // 租户ID
           terminalCode: terminalInfo.code, // 账号的状态
           terminalKey: terminalInfo.password, // 终端账号密码
-          templateCode: "T"   // 随便给的值
+          templateCode: "T" // 随便给的值
         }
+        this.tenantId = terminalInfo.tenantId;
+        this.status = terminalInfo.status?"启用":"暂停"
         this.$ctmList.getSwiperList(httpObj).then(res => {
           console.log(res)
           if (res.code === 200 && res.data) {
             this.arrList = res.data.displayTemplates
-            this.arrList.length &&  this.arrList.forEach(item =>{
+            this.arrList.length && this.arrList.forEach(item => {
               item.addressUrl = res.data.videoShowPlanUrl + item.url
             })
           } else {
@@ -58,9 +72,9 @@
       },
       goAddress(tCode) {
         this.$router.push({
-          path:'add',
-          query:{
-            templateCode:tCode
+          path: 'add',
+          query: {
+            templateCode: tCode
           }
         })
 
@@ -95,6 +109,17 @@
         background-color: #999;
         top: 40px;
       }
+      .middle-header{
+        span{
+          font-weight: 600;
+          font-size: 24px;
+          margin-right: 20px;
+        }
+      }
+      .right-header{
+         margin-right: 20px;
+         padding-top: 8px;
+      }
     }
 
     .content-show {
@@ -109,14 +134,15 @@
         width: 100%;
 
         .big-carousel {
-          width: 48%;
+          width: 80%;
           margin: 1em;
 
           .single-carousel {
-            height: 600px;
+            // height: 600px;
             overflow: hidden;
             border: 1px solid #333;
-            background-color: rgb(10, 30, 45);
+            // background-color: rgb(10, 30, 45);
+            cursor: pointer;
 
             .swiper-slide {
               padding: 1em;
