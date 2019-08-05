@@ -1,0 +1,94 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.oristartech</groupId>
+  <artifactId>csm-web-${env}</artifactId>
+  <version>1.0.0</version>
+  <name>csm-web</name>
+  <url>http://maven.apache.org</url>
+
+  <profiles>
+    <!-- 开发环境，默认激�?-->
+    <profile>
+      <id>dev</id>
+      <properties>
+        <env>dev</env>
+      </properties>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+    </profile>
+
+    <!-- 测服 -->
+    <profile>
+      <id>test</id>
+      <properties>
+        <env>test</env>
+      </properties>
+    </profile>
+
+    <!-- 预发�?-->
+    <profile>
+      <id>staging</id>
+      <properties>
+        <env>staging</env>
+      </properties>
+    </profile>
+
+    <!-- 正服 -->
+    <profile>
+      <id>production</id>
+      <properties>
+        <env>production</env>
+      </properties>
+    </profile>
+  </profiles>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>${project.basedir}/dist</directory>
+        <includes>
+          <include>*</include>
+        </includes>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
+    <plugins>
+
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <appendAssemblyId>false</appendAssemblyId>
+          <descriptors>
+            <descriptor>assembly.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+   <distributionManagement> 
+	    <repository>
+	        <id>releases</id>
+	        <url>http://192.168.102.147:8085/nexus/content/repositories/releases/</url>
+	    </repository>
+	    <snapshotRepository>
+	        <id>snapshots</id>
+	        <url>http://192.168.102.147:8085/nexus/content/repositories/snapshots/</url>
+	    </snapshotRepository>
+    </distributionManagement>
+  
+</project>
