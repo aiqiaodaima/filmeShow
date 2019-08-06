@@ -84,14 +84,14 @@ module.exports = {
                 test: /\.vue$/,
                 loaders: ['strip-loader?strip[]=console.log,strip[]=console.warn', 'vue']
             },
+            // {
+            //     test: /\.js$/,
+            //     exclude: /node_modules/,
+            //     loaders: ['strip-loader?strip[]=console.log,strip[]=console.warn', 'babel']
+            // },
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
-                loaders: ['strip-loader?strip[]=console.log,strip[]=console.warn', 'babel']
-            },
-            {
-                test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
+                // exclude: /(node_modules|bower_components)/,
                 loader: 'babel',
                 query: {
                     presets: ['es2015']
@@ -123,7 +123,7 @@ module.exports = {
         overlay: true,
         contentBase: path.join(__dirname, 'dist'),
         host: '127.0.0.1',
-        port: 8010,
+        port: 8020,
         proxy: {
             '/api/': {
                 target: 'http://localhost:9006/',
@@ -176,23 +176,23 @@ if (process.env.NODE_ENV === 'production') {
                 NODE_ENV: '"production"'
             }
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            sourceMap: true,
-            compress: {
-                warnings: false
-            }
-        }),
-        new ParallelUglifyPlugin({
-            cacheDir: '.cache/',
-            uglifyJS: {
-                output: {
-                    comments: false
-                },
-                compress: {
-                    warnings: false
-                }
-            }
-        }),
+        // new webpack.optimize.UglifyJsPlugin({
+        //     sourceMap: true,
+        //     compress: {
+        //         warnings: false
+        //     }
+        // }),
+        // new ParallelUglifyPlugin({
+        //     cacheDir: '.cache/',
+        //     uglifyJS: {
+        //         output: {
+        //             comments: false
+        //         },
+        //         compress: {
+        //             warnings: false
+        //         }
+        //     }
+        // }),
         new CompressionPlugin({
             asset: '[path].gz[query]', //目标资源名称。[file] 会被替换成原资源。[path] 会被替换成原资源路径，[query] 替换成原查询字符串
             algorithm: 'gzip', //算法
