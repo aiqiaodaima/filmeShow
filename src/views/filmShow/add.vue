@@ -3,27 +3,27 @@
     <div class="content-show">
       <ul class="out-carousel">
         <li class="big-carousel">
-          <div class="single-carousel">
+          <div class="single-carousel" :class="classObject">
             <swiper :options="swiperOption" v-if="planMovieList.length">
               <swiper-slide v-for="(item,index) in planMovieList" :key="index">
-                <div>
-                  <!-- <img :src="item.moviePicUrl" alt=""> -->
+                <div style="height:238px">
+                  <img :src="item.moviePicUrl" alt="">
                 </div>
                 <p class="tip-white">{{item.movieName}}</p>
                 <div class="swiperOption_v">
-                  <swiper :options="swiperOptionv">
+                  <swiper :options="swiperOptionv" v-if="item.timeList">
                     <swiper-slide v-for="(item2,index2) in item.timeList" :key="index2">
                       <div class="flim-Info">
-                        <p class="flim-time">{{item2.showTimeStart}}</p>
-                        <p class="flim-price">
-                          <span class="price-vip">会员120¥</span>
-                          <span class="price-normal">240¥</span>
+                        <p class="flim-time">{{item2.showTimeStart.slice(-8).slice(0,5)}}</p>
+                        <p class="flim-price" v-show="infoShow.seatNum">
+                          <span class="price-vip" v-show="infoShow.seatNum">会员120¥</span>
+                          <span class="price-normal" v-show="infoShow.nonMemberTicket">240¥</span>
                         </p>
                         <p class="fime-type">
-                          <span class="type-language">{{item.movieName}}</span>
-                          <span class="type-type">{{item.movieLanguage}}</span>
-                          <span class="type-position">{{item.hallName}}}</span>
-                          <span class="type-price">{{item2.leftSeatNum}}/{{item2.seatNum}}</span>
+                          <span class="type-language">{{item.movieLanguage}}</span>
+                          <span class="type-type">{{item. disVersion}}</span>
+                          <span class="type-position" v-show="infoShow.hallName">{{item2.hallName}}</span>
+                          <span class="type-price">{{item2.leftSeatNum}} / {{item2.seatNum}}</span>
                         </p>
                       </div>
                     </swiper-slide>
@@ -32,18 +32,14 @@
               </swiper-slide>
             </swiper>
           </div>
-          <!-- <p class="address-p">地址： www.oristarclound.com/mvs/t1.jsp</p> -->
-          <!-- <p class="tip-p">模板编号</p> -->
         </li>
       </ul>
     </div>
   </div>
 </template>
 <script>
-  import {
-    swiper,
-    swiperSlide
-  } from 'vue-awesome-swiper'
+  import { swiper, swiperSlide} from 'vue-awesome-swiper'
+   
   export default {
     components: {
       swiper,
@@ -51,39 +47,43 @@
     },
     data() {
       return {
+        classObject: {
+          balckBgc: false,
+          blueBgc: false,
+          greenBgc: false,
+          redBgc: false
+        },
+        planMovieList: [], // 影片信息
+        showList: [], // 显示信息
+        infoShow: {
+          nonMemberTicket: false, //票价
+          memberTicket: false, //会员价
+          hallName: false, // 影厅名称
+          seatNum: false, // 总座位数
+          leftSeatNum: false, // 剩余座位数
+          // movieName:false,  
+        },
         swiperOption: {
-          slidesPerView: 3,
+          // observer: true, //修改swiper自己或子元素时，自动初始化swiper 
+          // observeParents: true, //修改swiper的父元素时，自动初始化swiper 
+          slidesPerView: 6,
           spaceBetween: 15,
-          speed: 300,
-          autoplay: { // 自动切换
-            delay: 2500,
-            disableOnInteraction: false
-          },
+          direction: 'horizontal',
+          // speed: 300,
+          // autoplay: { // 自动切换
+          //   delay: 2500,
+          //   disableOnInteraction: false
+          // },
           loop: true,
+          // loopedSlides: 2,
           pagination: {
             el: '.swiper-pagination',
             clickable: true
           },
-          breakpoints: { // 响应布局
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 40
-            },
-            768: {
-              slidesPerView: 3,
-              spaceBetween: 30
-            },
-            640: {
-              slidesPerView: 2,
-              spaceBetween: 20
-            },
-            320: {
-              slidesPerView: 1,
-              spaceBetween: 10
-            }
-          }
         },
         swiperOptionv: {
+          // observer: true, //修改swiper自己或子元素时，自动初始化swiper 
+          // observeParents: true, //修改swiper的父元素时，自动初始化swiper 
           grabCursor: true,
           centeredSlides: true,
           slidesPerView: 'auto',
@@ -95,28 +95,28 @@
             slideShadows: true
           },
           speed: 300,
-          autoplay: { // 自动切换
-            delay: 1000,
-            stopOnLastSlide: false,
-            disableOnInteraction: true,
-          },
-          // loop : true,
+          // autoplay: { // 自动切换
+          //   delay: 1000,
+          //   stopOnLastSlide: false,
+          //   disableOnInteraction: true,
+          // },
+          loop: true,
           direction: 'vertical',
-          spaceBetween: 20,
+          // spaceBetween: 20,
         },
-        planMovieList:[],  // 影片信息
-        timeList: []  // 时间信息
+        planMovieList: [], // 影片信息
+        timeList: [] // 时间信息
       }
     },
     methods: {
-      templateDetail(){  // 获取详细信息
-        let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal) 
-        let httpObj = { 
+      templateDetail() { // 获取详细信息
+        let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal)
+        let httpObj = {
           tenantId: terminalInfo.tenantId, // 租户ID
           terminalCode: terminalInfo.code, // 账号的状态
           terminalKey: terminalInfo.password, // 终端账号密码
           // templateCode: this.$router.query.templateCode  || "T1"
-          templateCode : 'T1'
+          templateCode: 'T1'
         }
         console.log(httpObj)
         this.$ctmList.templateDetail(httpObj).then(res => {
@@ -124,6 +124,14 @@
           if (res.code === 200) {
 
             this.planMovieList = res.data.planMovieList;
+            console.log(this.planMovieList)
+            this.templateStyle = res.data.template;
+            this.classObject[res.data.template.backgroundColor] = true;
+            this.showList = res.data.template.columnList
+            this.showList.length && this.showList.forEach(item => {
+              console.log(item)
+              this.infoShow[item] = true
+            })
           } else {
             this.error(res.msg)
           }
@@ -137,12 +145,36 @@
   }
 </script>
 <style lang="scss" scoped>
-  img {
-    width: 100%;
-    height: 100px;
+  // img {
+  //   width: 100%;
+  //   height: 100px;
+  // }
+  .balckBgc {
+    // 高端黑
+    background-image: linear-gradient(0deg, #1D222D 0%, #51586C 99%);
+  }
+
+  .blueBgc {
+    // TV蓝
+    background-image: linear-gradient(-179deg, #16599F 0%, #1B082D 100%);
+  }
+
+  .greenBgc {
+    // TV绿
+    background-image: linear-gradient(-180deg, #074755 0%, #0A1E39 100%);
+  }
+
+  .redBgc {
+    // TV红
+    background-image: linear-gradient(0deg, #26001B 0%, #961340 99%);
   }
 
   .contain {
+    img {
+      width: 161px;
+      height: 238px;
+    }
+
     // height: 90vh;
     .header-title {
       display: flex;
@@ -168,7 +200,7 @@
       justify-content: space-between;
 
       .out-carousel {
-        display: flex;
+        // display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         width: 100%;

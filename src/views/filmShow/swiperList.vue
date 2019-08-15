@@ -21,8 +21,9 @@
             <div class="single-carousel">
               <img :src="item.thumbnail" alt="" @click="goAddress(item.tCode)">
             </div>
-            <p class="address-p" @click="goAddress(item.tCode)">地址： {{item.addressUrl}}</p>
-            <p class="tip-p">模板编号{{item.tCode}}</p>
+            <!-- <p class="address-p" @click="goAddress(item.tCode)">地址： {{item.addressUrl}}</p> -->
+            <!-- <p class="tip-p">模板编号{{item.tCode}}</p> -->
+              <p class="tip-p">{{item.name}}</p>
           </div>
         </el-col>
       </el-row>
@@ -89,6 +90,7 @@
 <style lang="scss" scoped>
   img {
     width: 100%;
+    height: 300px;
     // height: 100px;
   }
 
@@ -140,8 +142,6 @@
           .single-carousel {
             // height: 600px;
             overflow: hidden;
-            border: 1px solid #333;
-            // background-color: rgb(10, 30, 45);
             cursor: pointer;
 
             .swiper-slide {

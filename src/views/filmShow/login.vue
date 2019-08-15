@@ -36,7 +36,6 @@
           if (res.code === 200 && res.data) {
             this.$message({
               message: '恭喜你，注册成功',
-              type: 'success'
             });
             // this.$store.commit("ctmRemberTerminal",res.data);
             localStorage.setItem("ctmRemberTerminal",JSON.stringify(res.data))
