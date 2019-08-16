@@ -73,10 +73,10 @@
           spaceBetween: 15,
           direction: 'horizontal',
           speed: 300,
-          // autoplay: { // 自动切换
-          //   delay: 2500,
-          //   disableOnInteraction: false
-          // },
+          autoplay: { // 自动切换
+            delay: 2500,
+            disableOnInteraction: false
+          },
           loop: true,
           loopedSlides: 2,
           slidesPerView: '5',
@@ -100,11 +100,11 @@
           //   slideShadows: true
           // },
           speed: 300,
-          // autoplay: { // 自动切换
-          //   delay: 1000,
-          //   stopOnLastSlide: false,
-          //   disableOnInteraction: true,
-          // },
+          autoplay: { // 自动切换
+            delay: 1000,
+            stopOnLastSlide: false,
+            disableOnInteraction: true,
+          },
           loop: true,
           direction: 'vertical',
           // spaceBetween: 20,
