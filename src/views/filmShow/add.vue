@@ -4,7 +4,7 @@
       <ul class="out-carousel">
         <li class="big-carousel">
           <div class="single-carousel" :class="classObject" v-if="planMovieList.length">
-            <swiper :options="swiperOption"  ref="mySwiper">
+            <swiper :options="swiperOption" ref="mySwiper">
               <swiper-slide v-for="(item,index) in planMovieList" :key="index">
                 <div style="height:238px">
                   <img :src="item.moviePicUrl" alt="">
@@ -15,9 +15,11 @@
                     <swiper-slide v-for="(item2,index2) in item.timeList" :key="index2">
                       <div class="flim-Info">
                         <p class="flim-time">{{item2.showTimeStart.slice(-8).slice(0,5)}}</p>
-                        <p class="flim-price" v-show="infoShow.seatNum">
-                          <span class="price-vip" v-show="infoShow.seatNum">{{item2.ticketList[0].totalPrice}}</span>
-                          <span class="price-normal" v-show="infoShow.nonMemberTicket">240¥</span>
+                        <p class="flim-price">
+                          <span class="price-vip"
+                            v-show="infoShow.memberTicket">{{item2.ticketList[0] && item2.ticketList[0].price+"¥"}}</span>
+                          <span class="price-normal"
+                            v-show="infoShow.nonMemberTicket">{{item2.ticketList[1] && item2.ticketList[1].price+"¥"}}</span>
                         </p>
                         <p class="fime-type">
                           <span class="type-language">{{item.movieLanguage}}</span>
@@ -69,52 +71,64 @@
           leftSeatNum: false, // 剩余座位数
           // movieName:false,  
         },
-        swiperOption: {
-          // observer: true, //修改swiper自己或子元素时，自动初始化swiper 
-          // observeParents: true, //修改swiper的父元素时，自动初始化swiper 
-          slidesPerView: 6,
+         swiperOption: {
+          observer: true, //修改swiper自己或子元素时，自动初始化swiper 
+          observeParents: true, //修改swiper的父元素时，自动初始化swiper 
+          observeSlideChildren:true,
+          slidesPerView: 5,
           spaceBetween: 15,
-          direction: 'horizontal',
           speed: 300,
           autoplay: { // 自动切换
             delay: 1000,
             stopOnLastSlide: false,
-            disableOnInteraction: true,
+            disableOnInteraction: false,
           },
           loop: true,
-          loopedSlides: 2,
-          slidesPerView: '5',
+          loopAdditionalSlides:1,
+          // slidesPerView: '5',
           loopedSlides: 5,
           pagination: {
             el: '.swiper-pagination',
             clickable: true
           },
-          observer: true,
-          observeSlideChildren: true,
-          observeParents: true,
+          // on:{
+          //   slideChange: function(){
+          //     _this.$refs.mySwiper
+          //   }
+          // },
         },
         swiperOptionv: {
-          // observer: true, //修改swiper自己或子元素时，自动初始化swiper 
-          // observeParents: true, //修改swiper的父元素时，自动初始化swiper 
+          observer: true, //修改swiper自己或子元素时，自动初始化swiper 
+          observeParents: true, //修改swiper的父元素时，自动初始化swiper 
+          observeSlideChildren:true,
           grabCursor: true,
           centeredSlides: true,
+          // slidesPerView: 5,
           slidesPerView: 'auto',
+          coverflowEffect: {
+            rotate: 10,
+            stretch: -10,
+            depth: 10,
+            modifier: 2,
+            slideShadows: true
+          },
           speed: 300,
           autoplay: { // 自动切换
             delay: 1000,
             stopOnLastSlide: false,
-            disableOnInteraction: true,
+            disableOnInteraction: false,
           },
-          // loop: true,
+          loop: true,
+           loopAdditionalSlides:2,
           direction: 'vertical',
-          observer: true,
-          observeSlideChildren: true,
-          observeParents: true,
+          //   slidesPerView: '2',
+          // loopedSlides: 1,
+          // spaceBetween: 20,
         },
         planMovieList: [], // 影片信息
         timeList: [], // 时间信息
-        vipPrice:"",
-        commonPrice:""
+        vipPrice: "",
+        commonPrice: ""
       }
     },
     methods: {
@@ -146,11 +160,11 @@
         })
       }
     },
-    computed: {
-			swiper() {
-				return this.$refs.mySwiper.swiper
-			}
-		},
+    // computed: {
+    //   swiper() {
+    //     return this.$refs.mySwiper.swiper
+    //   }
+    // },
     created() {
       this.templateDetail()
       // this.translateRow()
