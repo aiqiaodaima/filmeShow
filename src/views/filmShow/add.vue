@@ -4,7 +4,7 @@
       <ul class="out-carousel">
         <li class="big-carousel">
           <div class="single-carousel" :class="classObject" v-if="planMovieList.length">
-            <swiper :options="swiperOption">
+            <swiper :options="swiperOption"  ref="mySwiper">
               <swiper-slide v-for="(item,index) in planMovieList" :key="index">
                 <div style="height:238px">
                   <img :src="item.moviePicUrl" alt="">
@@ -16,7 +16,7 @@
                       <div class="flim-Info">
                         <p class="flim-time">{{item2.showTimeStart.slice(-8).slice(0,5)}}</p>
                         <p class="flim-price" v-show="infoShow.seatNum">
-                          <span class="price-vip" v-show="infoShow.seatNum">会员120¥</span>
+                          <span class="price-vip" v-show="infoShow.seatNum">{{item2.ticketList[0].totalPrice}}</span>
                           <span class="price-normal" v-show="infoShow.nonMemberTicket">240¥</span>
                         </p>
                         <p class="fime-type">
@@ -34,6 +34,9 @@
           </div>
         </li>
       </ul>
+    </div>
+    <div class="btn-area">
+      <el-button type="primary" @click="$router.go(-1)">返回</el-button>
     </div>
   </div>
 </template>
@@ -74,8 +77,9 @@
           direction: 'horizontal',
           speed: 300,
           autoplay: { // 自动切换
-            delay: 2500,
-            disableOnInteraction: false
+            delay: 1000,
+            stopOnLastSlide: false,
+            disableOnInteraction: true,
           },
           loop: true,
           loopedSlides: 2,
@@ -85,6 +89,9 @@
             el: '.swiper-pagination',
             clickable: true
           },
+          observer: true,
+          observeSlideChildren: true,
+          observeParents: true,
         },
         swiperOptionv: {
           // observer: true, //修改swiper自己或子元素时，自动初始化swiper 
@@ -92,25 +99,22 @@
           grabCursor: true,
           centeredSlides: true,
           slidesPerView: 'auto',
-          // coverflowEffect: {
-          //   rotate: 10,
-          //   stretch: -10,
-          //   depth: 10,
-          //   modifier: 2,
-          //   slideShadows: true
-          // },
           speed: 300,
           autoplay: { // 自动切换
             delay: 1000,
             stopOnLastSlide: false,
             disableOnInteraction: true,
           },
-          loop: true,
+          // loop: true,
           direction: 'vertical',
-          // spaceBetween: 20,
+          observer: true,
+          observeSlideChildren: true,
+          observeParents: true,
         },
         planMovieList: [], // 影片信息
-        timeList: [] // 时间信息
+        timeList: [], // 时间信息
+        vipPrice:"",
+        commonPrice:""
       }
     },
     methods: {
@@ -127,7 +131,6 @@
         this.$ctmList.templateDetail(httpObj).then(res => {
           console.log(res)
           if (res.code === 200) {
-
             this.planMovieList = res.data.planMovieList;
             console.log(this.planMovieList)
             this.templateStyle = res.data.template;
@@ -143,6 +146,11 @@
         })
       }
     },
+    computed: {
+			swiper() {
+				return this.$refs.mySwiper.swiper
+			}
+		},
     created() {
       this.templateDetail()
       // this.translateRow()
@@ -208,10 +216,12 @@
 
         .big-carousel {
           width: 100%;
+
           // margin: 1em;
           .single-carousel {
             overflow: hidden;
             height: 100vh;
+
             .swiper-slide {
               padding: 1em;
 
@@ -352,6 +362,16 @@
         }
       }
 
+    }
+  }
+
+  .btn-area {
+    display: flex;
+    justify-content: center;
+    margin: 2em 0 1em;
+
+    .el-button {
+      padding: 9px 27px;
     }
   }
 </style>

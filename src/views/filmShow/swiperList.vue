@@ -6,7 +6,7 @@
       </p>
       <p class="right-header">
         <span>当前终端编号：</span>
-        <span>{{tenantId}}</span>
+        <span>{{terminalCode}}</span>
       </p>
       <p class="right-header">
         <span>状态：</span>
@@ -45,7 +45,8 @@
       return {
         arrList: [],
         status:1,
-        tenantId:""
+        tenantId:"",
+        terminalCode:""
       }
     },
     methods: {
@@ -58,6 +59,7 @@
           templateCode: "T" // 随便给的值
         }
         this.tenantId = terminalInfo.tenantId;
+        this.terminalCode = terminalInfo.code
         this.status = terminalInfo.status?"启用":"暂停"
         this.$ctmList.getSwiperList(httpObj).then(res => {
           console.log(res)
