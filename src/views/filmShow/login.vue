@@ -1,21 +1,22 @@
 <template>
-  <div>
+  <div class="bg_contain">
     <header>
-      慧影云排期展示首页
+      <p class="en_word">SCHEDULED DISPLAY</p>
+      <p class="ch_word">慧影云排期展示</p>
+
     </header>
     <div class="content_div">
       <p class="tips_p">当前终端未注册，请输入影院许可证号注册：</p>
       <div class="input_div">
-        <span>影院许可证号：</span>
-        <el-input v-model="licenseKey" placeholder="请输入内容" style="width:300px;"></el-input>
+        <el-input v-model="licenseKey" placeholder="请输入内容" class="licenseKey_input"></el-input>
       </div>
-      <p class="tips_p" style="color:#333">提示：可在慧影云-> 票务 -> 影院信息设置 ->查看界面，看到许可证号</p>
+      <p class="tips_p2">提示：可在慧影云-> 票务 -> 影院信息设置 ->查看界面，看到许可证号</p>
+      <div class="btn-area">
+        <button  class="btn_login" @click="filmLogin">注册</button>
+      </div>
     </div>
 
-    <div class="btn-area">
-      <el-button type="primary" @click="filmLogin">注册</el-button>
-      <el-button type="primary" style="margin-left:32px">关闭</el-button>
-    </div>
+
 
   </div>
 </template>
@@ -38,7 +39,7 @@
               message: '恭喜你，注册成功',
             });
             // this.$store.commit("ctmRemberTerminal",res.data);
-            localStorage.setItem("ctmRemberTerminal",JSON.stringify(res.data))
+            localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
             this.$router.push('swiperList')
           } else {
             this.error(res.data);
@@ -49,52 +50,85 @@
   }
 </script>
 <style lang="scss" scoped>
-  header {
-    text-align: center;
-    font-size: 24px;
-    color: #333;
-    height: 48px;
-    line-height: 48px;
+  .bg_contain {
+    background-image: linear-gradient(-135deg, #131720 0%, #1E2643 100%);
 
-    &::after {
-      content: "";
-      display: block;
-      width: 100%;
-      height: 1px;
-      background-color: #e5e5e5;
-    }
-  }
 
-  .content_div {
-    margin: 10em auto 5em;
+    height: 100vh;
 
-    .tips_p {
-      color: red;
-      font-size: 16px;
-      text-align: center;
-      margin-bottom: 36px;
-    }
+    // padding-left: 120px;
+    header {
+      background-image: url(./bglight.png);
+      background-repeat: no-repeat;
+      padding: 80px 0 0 120px;
 
-    .input_div {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 36px;
+      .en_word {
+        width: 265px;
+        background-image: linear-gradient(-90deg, #14275E 0%, #6690FF 100%);
+        font-family: DINAlternate-Bold;
+        font-size: 28px;
+        color: transparent;
+        -webkit-background-clip: text;
+        letter-spacing: 0;
+        text-shadow: 0 2px 4px #181E30;
+      }
 
-      span {
-        font-weight: 600;
-        color: #333;
-        font-size: 16px;
-        line-height: 32px;
+      .ch_word {
+        font-family: PingFangSC-Semibold;
+        font-size: 64px;
+        color: #FFFFFF;
+        letter-spacing: 0;
       }
     }
   }
 
-  .btn-area {
-    display: flex;
-    justify-content: center;
+  .content_div {
+    padding-left: 120px;
 
-    .el-button {
-      padding: 9px 27px;
+    .tips_p {
+      margin-top: 64px;
+      font-family: PingFang-SC-Bold;
+      font-size: 28px;
+      color: #FFFFFF;
+      letter-spacing: 0;
+    }
+
+    .licenseKey_input {
+      width: 640px;
+      height: 120px;
+      margin-top: 24px;
+
+      box-shadow: 0 15px 50px 0 rgba(18, 63, 192, 0.60);
+      border-radius: 10px;
+
+      /deep/ .el-input__inner {
+        border: 2px solid #FFFFFF;
+        background: #111625;
+        height: 120px;
+        font-family: DINAlternate-Bold;
+        font-size: 42px;
+        color: #FFFFFF;
+        letter-spacing: 0;
+      }
+    }
+
+    .tips_p2 {
+      margin-top: 30px;
+      font-family: PingFangSC-Semibold;
+      font-size: 24px;
+      color: #6F80B0;
+      letter-spacing: 0;
+    }
+    .btn_login{
+      margin-top: 92px;
+      width: 185px;
+      height: 80px;
+      background-image: linear-gradient(-225deg, #537BE6 0%, #94B1FF 100%);
+border-radius: 10px;
+font-family: PingFangSC-Semibold;
+font-size: 32px;
+color: #FFFFFF;
+letter-spacing: 0;
     }
   }
 </style>
