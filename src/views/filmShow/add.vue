@@ -146,7 +146,10 @@
           console.log(res)
           if (res.code === 200) {
             this.planMovieList = res.data.planMovieList;
-            console.log(this.planMovieList)
+            for(let i=0;i<3;i++){
+              this.planMovieList = this.planMovieList.concat(this.planMovieList)
+              console.log(i)
+            }
             this.templateStyle = res.data.template;
             this.classObject[res.data.template.backgroundColor] = true;
             this.showList = res.data.template.columnList
