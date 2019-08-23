@@ -1,52 +1,59 @@
 <template>
-  <div class="contain">
-    <div class="header-title">
-      <p class="middle-header">
-        <span>慧影云排期展示首页</span>
-      </p>
-      <p class="right-header">
-        <span>当前终端编号：</span>
-        <span>{{terminalCode}}</span>
-      </p>
-      <p class="right-header">
-        <span>状态：</span>
-        <span style="color:blue">{{status}}</span>
-      </p>
-    </div>
+  <div class="bg_contain">
+    <header>
+      <p class="en_word">SCHEDULED DISPLAY</p>
+      <p class="ch_word">慧影云排期展示</p>
+      <div class="right-header">
+        <p class="code_word">
+          当前终端编号：{{terminalCode}}
+        </p>
+        <p class="status_word">
+          {{status}}
+        </p>
+      </div>
+    </header>
     <div class="content-show">
-      <ul class="out-carousel">
-      <el-row>
-        <el-col :span="8" v-for="(item,index) in arrList" :key="index">
-          <div class="big-carousel">
-            <div class="single-carousel">
-              <img :src="item.thumbnail" alt="" @click="goAddress(item.tCode)">
-            </div>
-            <!-- <p class="address-p" @click="goAddress(item.tCode)">地址： {{item.addressUrl}}</p> -->
-            <!-- <p class="tip-p">模板编号{{item.tCode}}</p> -->
-              <p class="tip-p">{{item.name}}</p>
-          </div>
-        </el-col>
-      </el-row>
-      <!-- <ul class="out-carousel">
-        <li class="big-carousel" v-for="(item,index) in arrList" :key="index">
+      <swiper :options="swiperOption">
+        <swiper-slide v-for="(item,index) in arrList" :key="index">
           <div class="single-carousel">
-            <img :src="item.thumbnail" alt="">
+            <img :src="item.thumbnail" alt="" @click="goAddress(item.tCode)">
           </div>
-          <p class="address-p" @click="goAddress(item.tCode)">地址： {{item.addressUrl}}</p>
-          <p class="tip-p">模板编号{{item.tCode}}</p>
-        </li> -->
-      </ul> 
+
+          <p class="tip-p">{{item.name}}</p>
+        </swiper-slide>
+        <div class="swiper-pagination" slot="pagination"></div>
+      </swiper>
     </div>
   </div>
 </template>
 <script>
+  import {
+    swiper,
+    swiperSlide
+  } from 'vue-awesome-swiper'
   export default {
+    components: {
+      swiper,
+      swiperSlide
+    },
     data() {
       return {
+        swiperOption: {
+          slidesPerView: 'auto',
+          autoplay: {
+            delay: 2500,
+            disableOnInteraction: false
+          },
+          spaceBetween: 40,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true
+          }
+        },
         arrList: [],
-        status:1,
-        tenantId:"",
-        terminalCode:""
+        status: 1,
+        tenantId: "",
+        terminalCode: ""
       }
     },
     methods: {
@@ -60,7 +67,7 @@
         }
         this.tenantId = terminalInfo.tenantId;
         this.terminalCode = terminalInfo.code
-        this.status = terminalInfo.status?"启用":"暂停"
+        this.status = terminalInfo.status ? "启用" : "暂停"
         this.$ctmList.getSwiperList(httpObj).then(res => {
           console.log(res)
           if (res.code === 200 && res.data) {
@@ -90,169 +97,107 @@
   }
 </script>
 <style lang="scss" scoped>
-  img {
-    width: 100%;
-    height: 300px;
-    // height: 100px;
-  }
+  .bg_contain {
+    background-image: linear-gradient(-135deg, #131720 0%, #1E2643 100%);
 
-  .contain {
-    .header-title {
-      display: flex;
-      justify-content: center;
-      height: 36px;
-      line-height: 36px;
+
+    height: 100vh;
+
+    // padding-left: 120px;
+    header {
+      background-image: url(./bglight.png);
+      background-repeat: no-repeat;
+      padding: 80px 0 0 120px;
       position: relative;
 
-      &::after {
-        display: block;
-        content: "";
-        width: 100%;
+      .en_word {
+        width: 265px;
+        background-image: linear-gradient(-90deg, #14275E 0%, #6690FF 100%);
+        font-family: DINAlternate-Bold;
+        font-size: 28px;
+        color: transparent;
+        -webkit-background-clip: text;
+        letter-spacing: 0;
+        text-shadow: 0 2px 4px #181E30;
+      }
+
+      .ch_word {
+        font-family: PingFangSC-Semibold;
+        font-size: 64px;
+        color: #FFFFFF;
+        letter-spacing: 0;
+      }
+
+      .right-header {
         position: absolute;
-        height: 1px;
-        background-color: #999;
-        top: 40px;
-      }
-      .middle-header{
-        span{
-          font-weight: 600;
+        top: 84px;
+        right: 28px;
+
+        .code_word {
+          font-family: PingFangSC-Semibold;
           font-size: 24px;
-          margin-right: 20px;
+          color: #6F80B0;
+          letter-spacing: 0;
+          margin-bottom: 12px;
+        }
+
+        .status_word {
+          position: absolute;
+          right: 0;
+          text-align: center;
+          width: 90px;
+          height: 40px;
+          line-height: 40px;
+          background: #38AD65;
+          border-radius: 10px;
+          font-family: PingFang-SC-Bold;
+          font-size: 24px;
+          color: #FFFFFF;
+          letter-spacing: 0;
         }
       }
-      .right-header{
-         margin-right: 20px;
-         padding-top: 8px;
-      }
+    }
+  }
+
+  .content-show {
+    padding-left: 120px;
+    margin-top: 64px;
+
+    img {
+      width: 724px;
+      height: 407px;
     }
 
-    .content-show {
-      margin: 2rem;
-      display: flex;
-      justify-content: space-between;
-
-      .out-carousel {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        width: 100%;
-
-        .big-carousel {
-          width: 80%;
-          margin: 1em;
-
-          .single-carousel {
-            // height: 600px;
-            overflow: hidden;
-            cursor: pointer;
-
-            .swiper-slide {
-              padding: 1em;
-
-              .tip-white {
-                color: white;
-                line-height: 32px;
-                height: 32px;
-                text-align: center;
-              }
-            }
-
-            .swiperOption_v {
-              .swiper-slide {
-                width: 100%;
-                padding: 0;
-
-                // height: 40px;
-                // background-color: red;
-                .flim-Info {
-                  border: 2px solid white;
-                  position: relative;
-                  padding: 8px;
-                  border-radius: 5px;
-
-                  .flim-time {
-                    font-size: 16px;
-                    color: white;
-                    padding: 0.5em;
-                  }
-
-                  .flim-price {
-                    position: absolute;
-                    right: 0;
-                    top: 0;
-
-                    .price-vip {
-                      display: block;
-                      background: white;
-                      color: #333;
-
-                    }
-
-                    .price-normal {
-                      display: block;
-                      color: white;
-                      text-align: right;
-                      padding: 4px;
-                    }
-                  }
-
-                  .fime-type {
-                    display: flex;
-
-                    .type-language {
-                      background: yellow;
-                      color: #000;
-                      padding: 2px;
-                      white-space: nowrap;
-                      border-radius: 1px;
-                    }
-
-                    .type-type {
-                      padding: 2px;
-                      background: #999;
-                      color: white;
-                      white-space: nowrap;
-                    }
-
-                    .type-position {
-                      padding: 2px;
-                      // background: #999;
-                      color: white;
-                      white-space: nowrap;
-                    }
-
-                    .type-price {
-                      font-size: 12px;
-                      color: rgb(100, 106, 118);
-                      line-height: 16px;
-                    }
-                  }
-
-                  // width: 200px;
-                  // height: 100px;
-                }
-              }
-            }
-          }
-
-          .address-p {
-            text-align: center;
-            height: 24px;
-            line-height: 24px;
-            cursor: pointer;
-          }
-
-          .tip-p {
-            text-align: center;
-            font-weight: 600;
-            color: #333;
-            font-size: 16px;
-            height: 32px;
-            line-height: 32px;
-          }
-        }
-      }
-
+    .swiper-slide {
+      width: 754px !important;
     }
+
+    .tip-p {
+      font-family: PingFang-SC-Bold;
+      font-size: 28px;
+      color: #FFFFFF;
+      letter-spacing: 0;
+    }
+    .swiper-pagination{
+      position: relative;
+      text-align: left;
+      margin-top:70px; 
+    }
+    /deep/ .swiper-pagination-bullet {
+      width: 32px;
+      height: 8px;
+      background: #404B6B;
+      border-radius: 7.5px;
+    }
+    /deep/ .swiper-pagination-bullet-active{
+      width: 62px;
+      background-image: linear-gradient(-270deg, #537BE6 2%, #94B1FF 100%);
+      box-shadow: 0 5px 20px 0 #123FC0;
+      border-radius: 7.5px;
+    }
+
+
+
+
   }
 </style>
