@@ -6,7 +6,7 @@
           <div class="single-carousel" :class="classObject" v-if="planMovieList.length">
             <swiper :options="swiperOption" ref="mySwiper">
               <swiper-slide v-for="(item,index) in planMovieList" :key="index">
-                <div style="height:238px">
+                <div style="height:340px">
                   <img :src="item.moviePicUrl" alt="">
                 </div>
                 <p class="tip-white">{{item.movieName}}</p>
@@ -69,7 +69,6 @@
           hallName: false, // 影厅名称
           seatNum: false, // 总座位数
           leftSeatNum: false, // 剩余座位数
-          // movieName:false,  
         },
          swiperOption: {
           observer: true, //修改swiper自己或子元素时，自动初始化swiper 
@@ -138,8 +137,8 @@
           tenantId: terminalInfo.tenantId, // 租户ID
           terminalCode: terminalInfo.code, // 账号的状态
           terminalKey: terminalInfo.password, // 终端账号密码
-          // templateCode: this.$router.query.templateCode  || "T1"
-          templateCode: 'T1'
+          templateCode: this.$route.query.templateCode  || "T1"
+          // templateCode: 'T1'
         }
         console.log(httpObj)
         this.$ctmList.templateDetail(httpObj).then(res => {
@@ -201,8 +200,8 @@
 
   .contain {
     img {
-      width: 161px;
-      height: 238px;
+      width: 238px;
+      height: 340px;
     }
 
     // height: 90vh;
