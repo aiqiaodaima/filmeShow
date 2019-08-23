@@ -147,9 +147,9 @@
             this.planMovieList = res.data.planMovieList;
             for(let i=0;i<3;i++){
               this.planMovieList = this.planMovieList.concat(this.planMovieList)
-              console.log(i)
             }
             this.templateStyle = res.data.template;
+            if(res.data.template.backgroundColor == "#ffffff" || !res.data.template.backgroundColor) res.data.template.backgroundColor = "balckBgc"
             this.classObject[res.data.template.backgroundColor] = true;
             this.showList = res.data.template.columnList
             this.showList.length && this.showList.forEach(item => {
