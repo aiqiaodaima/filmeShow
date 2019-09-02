@@ -149,7 +149,7 @@
               this.planMovieList = this.planMovieList.concat(this.planMovieList)
             }
             this.templateStyle = res.data.template;
-            if(res.data.template.backgroundColor == "#ffffff" || !res.data.template.backgroundColor) res.data.template.backgroundColor = "balckBgc"
+            if(res.data.template.backgroundColor.indexOf('#')== 0 || !res.data.template.backgroundColor) res.data.template.backgroundColor = "balckBgc"
             this.classObject[res.data.template.backgroundColor] = true;
             this.showList = res.data.template.columnList
             this.showList.length && this.showList.forEach(item => {
@@ -162,14 +162,8 @@
         })
       }
     },
-    // computed: {
-    //   swiper() {
-    //     return this.$refs.mySwiper.swiper
-    //   }
-    // },
     created() {
       this.templateDetail()
-      // this.translateRow()
     }
   }
 </script>

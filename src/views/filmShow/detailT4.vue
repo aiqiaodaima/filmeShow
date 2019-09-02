@@ -1,27 +1,31 @@
 <template>
   <div class="bg_contain">
     <header>
-      <p class="en_word">SCHEDULED DISPLAY</p>
-      <p class="ch_word">慧影云排期展示</p>
-      <div class="right-header">
-        <p class="code_word">
-          当前终端编号：{{terminalCode}}
-        </p>
-        <p class="status_word">
-          {{status}}
-        </p>
-      </div>
+      <p class="en_word">MOVIE NEWS</p>
+      <p class="ch_word">今日影讯</p>
     </header>
     <div class="content-show">
       <swiper :options="swiperOption">
         <swiper-slide v-for="(item,index) in arrList" :key="index">
-          <div class="single-carousel">
-            <img :src="item.thumbnail" alt="" @click="goAddress(item.tCode)">
-          </div>
+          <el-table :data="tableData" style="width: 100%">
+            <el-table-column prop="date" label="影片名称" width="180">
+            </el-table-column>
+            <el-table-column prop="name" label="语种" width="180">
+            </el-table-column>
+            <el-table-column prop="address" label="影厅">
+            </el-table-column>
+            <el-table-column prop="name" label="开场时间" width="180">
+            </el-table-column>
+            <el-table-column prop="address" label="售价">
+            </el-table-column>
+            <el-table-column prop="name" label="会员价" width="180">
+            </el-table-column>
+            <el-table-column prop="address" label="可售座位">
+            </el-table-column>
+          </el-table>
 
-          <p class="tip-p">{{item.name}}</p>
+
         </swiper-slide>
-        <div class="swiper-pagination" slot="pagination"></div>
       </swiper>
     </div>
   </div>
@@ -41,15 +45,32 @@
         swiperOption: {
           slidesPerView: 'auto',
           autoplay: {
-            delay: 2500,
+            delay: 5000,
             disableOnInteraction: false
           },
-          spaceBetween: 40,
-          pagination: {
-            el: '.swiper-pagination',
-            clickable: true
-          }
+          // spaceBetween: 40,
+          // pagination: {
+          //   el: '.swiper-pagination',
+          //   clickable: true
+          // }
         },
+        tableData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }],
         arrList: [],
         status: 1,
         tenantId: "",
@@ -99,8 +120,6 @@
 <style lang="scss" scoped>
   .bg_contain {
     background-image: linear-gradient(-135deg, #131720 0%, #1E2643 100%);
-
-
     height: 100vh;
 
     // padding-left: 120px;
@@ -157,47 +176,18 @@
         }
       }
     }
-  }
 
-  .content-show {
-    padding-left: 120px;
-    margin-top: 64px;
+    /deep/ .content-show {
+      padding: 0 120px;
 
-    img {
-      width: 724px;
-      height: 407px;
+      .el-table {
+        background: transparent;
+
+        .has-gutter {
+          tr {}
+        }
+      }
+
     }
-
-    .swiper-slide {
-      width: 754px !important;
-    }
-
-    .tip-p {
-      font-family: PingFang-SC-Bold;
-      font-size: 28px;
-      color: #FFFFFF;
-      letter-spacing: 0;
-    }
-    .swiper-pagination{
-      position: relative;
-      text-align: left;
-      margin-top:70px; 
-    }
-    /deep/ .swiper-pagination-bullet {
-      width: 32px;
-      height: 8px;
-      background: #404B6B;
-      border-radius: 7.5px;
-    }
-    /deep/ .swiper-pagination-bullet-active{
-      width: 62px;
-      background-image: linear-gradient(-270deg, #537BE6 2%, #94B1FF 100%);
-      box-shadow: 0 5px 20px 0 #123FC0;
-      border-radius: 7.5px;
-    }
-
-
-
-
   }
 </style>
