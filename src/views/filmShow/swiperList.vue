@@ -15,8 +15,8 @@
     <div class="content-show">
       <swiper :options="swiperOption">
         <swiper-slide v-for="(item,index) in arrList" :key="index">
-          <div class="single-carousel">
-            <img :src="item.thumbnail" alt="" @click="goAddress(item.tCode)">
+          <div class="single-carousel" @click="goAddress(item.tCode)">
+            <img :src="item.thumbnail" alt="">
           </div>
 
           <p class="tip-p">{{item.name}}</p>
@@ -166,6 +166,7 @@
     .single-carousel{
       width: 724px;
       height: 407px;
+      cursor: pointer;
     }
      img {
       width: 724px;

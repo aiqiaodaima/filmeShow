@@ -24,7 +24,6 @@
                     <span class="normal_price"
                       v-show="i.ticketList[0] && infoShow.nonMemberTicket">¥{{i.ticketList[0] && i.ticketList[0].totalPrice}}</span>
                   </p>
-
               </li>
             </ul>
           </div>

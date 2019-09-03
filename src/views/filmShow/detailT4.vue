@@ -23,8 +23,6 @@
             <el-table-column prop="address" label="可售座位">
             </el-table-column>
           </el-table>
-
-
         </swiper-slide>
       </swiper>
     </div>
