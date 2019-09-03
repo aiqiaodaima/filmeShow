@@ -77,6 +77,7 @@
             })
           } else {
             this.error(res.msg)
+            this.status =  "暂停"
           }
         })
       },

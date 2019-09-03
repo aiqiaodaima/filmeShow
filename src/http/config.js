@@ -16,6 +16,7 @@ console.log(domain)
 switch (domain) {
     case "127.0.0.1":
     config.baseURL = protocol + '//apidev.oristarcloud.com'
+    // config.baseURL = protocol + '//apitest.oristarcloud.com'
         break;
     case "devfilmshow.oristarcloud.com":
     config.baseURL = protocol + '//apidev.oristarcloud.com'

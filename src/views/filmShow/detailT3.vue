@@ -11,11 +11,15 @@
       <swiper :options="swiperOption" ref="swiper" v-if="swiperNum">
         <swiper-slide v-for="a in swiperNum" :key="a">
           <div class="item-div" v-for="(item,index) in arrList[a-1]" :key="index">
-            <p class="p-title">{{item.movieName}} <span>{{item.movieLanguage}}/{{item.disVersion}}</span></p>
-            <p class="p-time"><span>{{item.timeLong}}分钟</span><span>¥120</span></p>
+            <p class="p-title">{{item.movieName}} <span>{{item.movieLanguage}}/{{item.disVersion}}</span>
+              <span class="span-time">{{item.timeLong}}分钟</span>
+            </p>
             <ul class="ul-playTime">
               <li v-for="(i,j) in item.timeList" :key="j">
-                {{i.showTimeStart.substring(10,16)}}
+                <p class="movie-time">{{i.showTimeStart.substring(10,16)}}</p>
+                <p class="movie-price"><span class="vip_price">¥{{i.ticketList[1].totalPrice}}</span>
+                  <span class="normal_price" v-show="i.ticketList[0].totalPrice">/¥{{i.ticketList[0].totalPrice}}</span> </p>
+
               </li>
             </ul>
           </div>
@@ -25,24 +29,24 @@
   </div>
 </template>
 <script>
-function dateFormat(fmt, date) {
+  function dateFormat(fmt, date) {
     let ret;
     let opt = {
-        "Y+": date.getFullYear().toString(),        // 年
-        "m+": (date.getMonth() + 1).toString(),     // 月
-        "d+": date.getDate().toString(),            // 日
-        "H+": date.getHours().toString(),           // 时
-        "M+": date.getMinutes().toString(),         // 分
-        "S+": date.getSeconds().toString()          // 秒
+      "Y+": date.getFullYear().toString(), // 年
+      "m+": (date.getMonth() + 1).toString(), // 月
+      "d+": date.getDate().toString(), // 日
+      "H+": date.getHours().toString(), // 时
+      "M+": date.getMinutes().toString(), // 分
+      "S+": date.getSeconds().toString() // 秒
     };
     for (let k in opt) {
-        ret = new RegExp("(" + k + ")").exec(fmt);
-        if (ret) {
-            fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
-        };
+      ret = new RegExp("(" + k + ")").exec(fmt);
+      if (ret) {
+        fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+      };
     };
     return fmt;
-}
+  }
   import {
     swiper,
     swiperSlide
@@ -71,7 +75,7 @@ function dateFormat(fmt, date) {
           // spaceBetween: 40,
           on: {
             slideChange: function () {
-            
+
               console.log('slideChange', this.previousIndex, '->', this.activeIndex)
             },
           }
@@ -97,8 +101,8 @@ function dateFormat(fmt, date) {
           pageNum: this.pageNum,
           // pageSize: this.pageSize,
           pageSize: 100,
-          // planDate: '2019-09-03'
-          planDate:dateFormat("YYYY-mm-dd", new Date())
+          // planDate: '2019-09-04'
+          // planDate:dateFormat("YYYY-mm-dd", new Date())
         }
         // this.tenantId = terminalInfo.tenantId;
         // this.terminalCode = terminalInfo.code
@@ -134,7 +138,7 @@ function dateFormat(fmt, date) {
   }
 </script>
 <style lang="scss" scoped>
-.balckBgc {
+  .balckBgc {
     // 高端黑
     background-image: linear-gradient(0deg, #1D222D 0%, #51586C 99%);
   }
@@ -153,6 +157,7 @@ function dateFormat(fmt, date) {
     // TV红
     background-image: linear-gradient(0deg, #26001B 0%, #961340 99%);
   }
+
   .bg_contain {
     background-image: linear-gradient(-135deg, #131720 0%, #1E2643 100%);
 
@@ -233,10 +238,8 @@ function dateFormat(fmt, date) {
           letter-spacing: 0;
           text-align: right;
         }
-      }
 
-      .p-time {
-        span {
+        .span-time {
           background: #111625;
           border: 1px solid #445380;
           border-radius: 10px;
@@ -250,6 +253,7 @@ function dateFormat(fmt, date) {
         }
       }
 
+
       .ul-playTime {
         display: flex;
         flex-wrap: wrap;
@@ -259,12 +263,31 @@ function dateFormat(fmt, date) {
           background-image: linear-gradient(90deg, #212C53 0%, #313E5F 100%);
           box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.20);
           border-radius: 10px;
-          font-family: DINAlternate-Bold;
-          font-size: 34px;
-          color: #FFFFFF;
-          letter-spacing: 0;
           padding: 15px 24px;
           margin: 0 36px 30px 0;
+
+          .movie-time {
+            font-family: DINAlternate-Bold;
+            font-size: 34px;
+            color: #FFFFFF;
+            letter-spacing: 0;
+          }
+
+          .movie-price {
+            .vip_price {
+              font-family: DINAlternate-Bold;
+              font-size: 22px;
+              color: #FD9918;
+              letter-spacing: 0;
+            }
+
+            .normal_price {
+              font-family: DINAlternate-Bold;
+              font-size: 18px;
+              color: #6F80B0;
+              letter-spacing: 0;
+            }
+          }
         }
       }
     }
