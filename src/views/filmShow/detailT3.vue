@@ -17,8 +17,13 @@
             <ul class="ul-playTime">
               <li v-for="(i,j) in item.timeList" :key="j">
                 <p class="movie-time">{{i.showTimeStart.substring(10,16)}}</p>
-                <p class="movie-price"><span class="vip_price">¥{{i.ticketList[1] && i.ticketList[1].totalPrice}}</span>
-                  <span class="normal_price" v-show="i.ticketList[0].totalPrice">/¥{{i.ticketList[0] && i.ticketList[0].totalPrice}}</span> </p>
+                <p class="movie-price">
+                    <span class="vip_price"
+                      v-show="infoShow.memberTicket && i.ticketList[1]">¥{{i.ticketList[1] && i.ticketList[1].totalPrice}}</span>
+                    <span class="normal_price" v-show="infoShow.memberTicket && infoShow.nonMemberTicket && i.ticketList[1] && i.ticketList[0].totalPrice">/</span>
+                    <span class="normal_price"
+                      v-show="i.ticketList[0].totalPrice && infoShow.nonMemberTicket">¥{{i.ticketList[0] && i.ticketList[0].totalPrice}}</span>
+                  </p>
 
               </li>
             </ul>
@@ -64,6 +69,13 @@
           blueBgc: false,
           greenBgc: false,
           redBgc: false
+        },
+        infoShow: {
+          nonMemberTicket: false, //票价
+          memberTicket: false, //会员价
+          hallName: false, // 影厅名称
+          seatNum: false, // 总座位数
+          leftSeatNum: false, // 剩余座位数
         },
         swiperOption: {
           slidesPerView: 'auto',
@@ -118,6 +130,11 @@
               this.arrList.push(JSON.parse(JSON.stringify(temp)));
               console.log(this.arrList)
             }
+            this.showList = res.data.template.columnList
+            this.showList.length && this.showList.forEach(item => {
+              console.log(item)
+              this.infoShow[item] = true
+            })
           } else {
             this.error(res.msg)
           }
