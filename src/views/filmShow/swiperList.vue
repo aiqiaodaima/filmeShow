@@ -163,7 +163,10 @@
   .content-show {
     padding-left: 120px;
     margin-top: 64px;
-
+    .single-carousel{
+      width: 724px;
+      height: 407px;
+    }
     img {
       width: 724px;
       height: 407px;
