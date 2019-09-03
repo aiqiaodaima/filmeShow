@@ -25,6 +25,24 @@
   </div>
 </template>
 <script>
+function dateFormat(fmt, date) {
+    let ret;
+    let opt = {
+        "Y+": date.getFullYear().toString(),        // 年
+        "m+": (date.getMonth() + 1).toString(),     // 月
+        "d+": date.getDate().toString(),            // 日
+        "H+": date.getHours().toString(),           // 时
+        "M+": date.getMinutes().toString(),         // 分
+        "S+": date.getSeconds().toString()          // 秒
+    };
+    for (let k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+            fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+        };
+    };
+    return fmt;
+}
   import {
     swiper,
     swiperSlide
@@ -79,7 +97,8 @@
           pageNum: this.pageNum,
           // pageSize: this.pageSize,
           pageSize: 100,
-          planDate: '2019-09-02'
+          // planDate: '2019-09-03'
+          planDate:dateFormat("YYYY-mm-dd", new Date())
         }
         // this.tenantId = terminalInfo.tenantId;
         // this.terminalCode = terminalInfo.code
@@ -99,23 +118,8 @@
             this.error(res.msg)
           }
         })
-      },
-      goAddress(tCode) {
-        this.$router.push({
-          path: `detail${tCode}`,
-          query: {
-            templateCode: tCode
-          }
-        })
-
       }
     },
-    // watch:{
-    //   pageNum(){
-    //     console.log(this.pageNum)
-    //     this.getList()
-    //   }
-    // },
     mounted() {
       this.timer = setInterval(() => {
         this.dateTime = new Date().toLocaleString(); // 修改数据date
