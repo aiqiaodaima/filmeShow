@@ -167,7 +167,7 @@
       width: 724px;
       height: 407px;
     }
-    img {
+     img {
       width: 724px;
       height: 407px;
     }

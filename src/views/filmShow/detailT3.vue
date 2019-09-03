@@ -20,9 +20,9 @@
                 <p class="movie-price">
                     <span class="vip_price"
                       v-show="infoShow.memberTicket && i.ticketList[1]">¥{{i.ticketList[1] && i.ticketList[1].totalPrice}}</span>
-                    <span class="normal_price" v-show="infoShow.memberTicket && infoShow.nonMemberTicket && i.ticketList[1] && i.ticketList[0].totalPrice">/</span>
+                    <span class="normal_price" v-show="infoShow.memberTicket && infoShow.nonMemberTicket && i.ticketList[1] && i.ticketList[0]">/</span>
                     <span class="normal_price"
-                      v-show="i.ticketList[0].totalPrice && infoShow.nonMemberTicket">¥{{i.ticketList[0] && i.ticketList[0].totalPrice}}</span>
+                      v-show="i.ticketList[0] && infoShow.nonMemberTicket">¥{{i.ticketList[0] && i.ticketList[0].totalPrice}}</span>
                   </p>
 
               </li>
