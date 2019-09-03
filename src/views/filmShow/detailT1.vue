@@ -17,9 +17,9 @@
                         <p class="flim-time">{{item2.showTimeStart.slice(-8).slice(0,5)}}</p>
                         <p class="flim-price">
                           <span class="price-vip"
-                            v-show="infoShow.memberTicket">{{item2.ticketList[0] && item2.ticketList[0].price+"¥"}}</span>
+                            v-show="infoShow.memberTicket">{{item2.ticketList[0] && item2.ticketList[0].totalPrice+"¥"}}</span>
                           <span class="price-normal"
-                            v-show="infoShow.nonMemberTicket">{{item2.ticketList[1] && item2.ticketList[1].price+"¥"}}</span>
+                            v-show="infoShow.nonMemberTicket">{{item2.ticketList[1] && item2.ticketList[1].totalPrice+"¥"}}</span>
                         </p>
                         <p class="fime-type">
                           <span class="type-language">{{item.movieLanguage}}</span>
@@ -75,17 +75,17 @@
           observeParents: true, //修改swiper的父元素时，自动初始化swiper 
           observeSlideChildren:true,
           slidesPerView: 5,
-          spaceBetween: 15,
-          speed: 300,
+          // spaceBetween: 15,
+          speed: 1000,
           autoplay: { // 自动切换
-            delay: 1000,
+            delay: 3000,
             stopOnLastSlide: false,
             disableOnInteraction: false,
           },
-          loop: true,
-          loopAdditionalSlides:1,
+          // loop: true,
+          // loopAdditionalSlides:1,
           // slidesPerView: '5',
-          loopedSlides: 5,
+          // loopedSlides: 5,
           pagination: {
             el: '.swiper-pagination',
             clickable: true
@@ -104,16 +104,10 @@
           centeredSlides: true,
           // slidesPerView: 5,
           slidesPerView: 'auto',
-          coverflowEffect: {
-            rotate: 10,
-            stretch: -10,
-            depth: 10,
-            modifier: 2,
-            slideShadows: true
-          },
-          speed: 300,
+          
+          speed: 1000,
           autoplay: { // 自动切换
-            delay: 1000,
+            delay: 3000,
             stopOnLastSlide: false,
             disableOnInteraction: false,
           },
@@ -145,8 +139,11 @@
           console.log(res)
           if (res.code === 200) {
             this.planMovieList = res.data.planMovieList;
-            for(let i=0;i<3;i++){
-              this.planMovieList = this.planMovieList.concat(this.planMovieList)
+           if(this.planMovieList.length<5){
+              for (let i = 0; i < 3; i++) {
+                this.planMovieList = this.planMovieList.concat(this.planMovieList)
+                console.log(this.planMovieList)
+              }
             }
             this.templateStyle = res.data.template;
             if(res.data.template.backgroundColor.indexOf('#')== 0 || !res.data.template.backgroundColor) res.data.template.backgroundColor = "balckBgc"

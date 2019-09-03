@@ -17,8 +17,8 @@
             <ul class="ul-playTime">
               <li v-for="(i,j) in item.timeList" :key="j">
                 <p class="movie-time">{{i.showTimeStart.substring(10,16)}}</p>
-                <p class="movie-price"><span class="vip_price">¥{{i.ticketList[1].totalPrice}}</span>
-                  <span class="normal_price" v-show="i.ticketList[0].totalPrice">/¥{{i.ticketList[0].totalPrice}}</span> </p>
+                <p class="movie-price"><span class="vip_price">¥{{i.ticketList[1] && i.ticketList[1].totalPrice}}</span>
+                  <span class="normal_price" v-show="i.ticketList[0].totalPrice">/¥{{i.ticketList[0] && i.ticketList[0].totalPrice}}</span> </p>
 
               </li>
             </ul>
