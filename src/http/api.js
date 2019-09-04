@@ -132,6 +132,18 @@ export default function $axios(options) {
                         });
                         window.location.href = '#/login';
                         break;
+                    case 10000:
+                        // alert(data.msg);
+                        Message({
+                            message: data.msg,
+                            type: 'warning'
+                        });
+                        console.log(1111111111111)
+                            // router.push({
+                            //     path: `login`
+                            // });
+                        window.location.href = '/login';
+                        break;
                     default:
                         // alert(data.msg);
                         Message({

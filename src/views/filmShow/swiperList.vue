@@ -38,6 +38,7 @@
     },
     data() {
       return {
+        licenseKey:this.$route.query.license || "",
         swiperOption: {
           slidesPerView: 'auto',
           autoplay: {
@@ -81,6 +82,21 @@
           }
         })
       },
+      filmLogin() {
+        let httpObj = {
+          licenseKey: this.licenseKey,
+          type: 1 // 账号类型,1排期展示 2语言播报
+        }
+        this.$ctmList.filmLogin(httpObj).then(res => {
+          console.log(res)
+          if (res.code === 200 && res.data) {
+            localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
+            this.getList()
+          } else {
+            this.error(res.data);
+          }
+        })
+      },
       goAddress(tCode) {
         this.$router.push({
           path: `detail${tCode}`,
@@ -92,7 +108,10 @@
       }
     },
     mounted() {
-      this.getList()
+      if(this.$route.query.template){
+        this.goAddress("T"+this.$route.query.template)
+      }
+      this.filmLogin()
       // this.translateRow()
     }
   }
