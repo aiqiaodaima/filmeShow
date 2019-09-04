@@ -38,7 +38,7 @@
     },
     data() {
       return {
-        licenseKey:this.$route.query.license || "",
+        // licenseKey:this.$route.query.license || "",
         swiperOption: {
           slidesPerView: 'auto',
           autoplay: {
@@ -108,10 +108,19 @@
       }
     },
     mounted() {
-      if(this.$route.query.template){
-        this.goAddress("T"+this.$route.query.template)
+      if(!localStorage.ctmRemberTerminal){
+        if(this.$route.query.licenseKey){
+          this.filmLogin()
+        }else{
+          this.$router.push('login')
+        }
+      }else{
+        this.getList()
       }
-      this.filmLogin()
+      // if(this.$route.query.template){
+      //   this.goAddress(this.$route.query.template)
+      // }
+      // this.filmLogin()
       // this.translateRow()
     }
   }

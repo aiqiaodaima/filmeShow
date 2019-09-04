@@ -142,7 +142,7 @@ export default function $axios(options) {
                             // router.push({
                             //     path: `login`
                             // });
-                        window.location.href = '/login';
+                        // window.location.href = '/login';
                         break;
                     default:
                         // alert(data.msg);
