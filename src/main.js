@@ -53,7 +53,6 @@ const setGlobalTopNavs = function (to, next) {
 
 Vue.use(require('vue-wechat-title'));
 router.beforeEach((to, from, next) => {
-    console.log(to)
     if (to.query.license) {
         let httpObj = {
             licenseKey: to.query.license,
@@ -69,6 +68,8 @@ router.beforeEach((to, from, next) => {
                 next();
             }
         })
+    }else{
+        next()
     }
     let token = localStorage.getItem('token');
     NProgress.start();
