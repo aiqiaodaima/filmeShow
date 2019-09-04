@@ -55,6 +55,12 @@ Vue.use(require('vue-wechat-title'));
 router.beforeEach((to, from, next) => {
     let token = localStorage.getItem('token');
     NProgress.start();
+    if(to.path.indexOf("/cms-mvs/page/") != -1 ){
+        console.log('进来了--/cms-mvs/page')
+        next({ path: '/login' })
+    }else{
+        next();
+    }
     // if (to.path == '/login') {
     //     let loginInfor = localStorage.getItem('userLocation');
     //     localStorage.clear();
@@ -84,7 +90,7 @@ router.beforeEach((to, from, next) => {
     //         setGlobalTopNavs(to, next);
     // 	}
     // }
-    next();
+    // next();
 });
 router.afterEach((transition) => {
     NProgress.done();
