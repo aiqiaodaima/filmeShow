@@ -33,7 +33,7 @@ Vue.config.silent = process.env.NODE_ENV === 'production'
 Vue.config.devtools = true
 Vue.config.productionTip = false
 
-const setGlobalTopNavs = function(to, next) {
+const setGlobalTopNavs = function (to, next) {
     let matchedLength = to.matched.length;
     let item = to;
     if (matchedLength > 2) {
@@ -53,6 +53,23 @@ const setGlobalTopNavs = function(to, next) {
 
 Vue.use(require('vue-wechat-title'));
 router.beforeEach((to, from, next) => {
+    console.log(to)
+    if (to.query.license) {
+        let httpObj = {
+            licenseKey: to.query.license,
+            type: 1 // 账号类型,1排期展示 2语言播报
+        }
+        console.log(Vue.prototype.$ctmList)
+        Vue.prototype.$ctmList.filmLogin(httpObj).then(res => {
+            if (res.code === 200 && res.data) {
+                localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
+                next();
+            } else {
+                Vue.prototype.error(res.data);
+                next();
+            }
+        })
+    }
     let token = localStorage.getItem('token');
     NProgress.start();
     // if(to.path.indexOf("/cms-mvs/page/") != -1 ){
@@ -90,14 +107,14 @@ router.beforeEach((to, from, next) => {
     //         setGlobalTopNavs(to, next);
     // 	}
     // }
-    next();
+    // next();
 });
 router.afterEach((transition) => {
     NProgress.done();
 });
 
 //整理全局弹出框
-Vue.prototype.alert = function(obj) {
+Vue.prototype.alert = function (obj) {
     let str = obj.str ? obj.str : '',
         title = obj.title ? obj.title : '提示',
         btnText = obj.btnText ? obj.btnText : '确定';
@@ -111,7 +128,7 @@ Vue.prototype.alert = function(obj) {
     });
 };
 //整理全局访问框
-Vue.prototype.confirm = function(obj) {
+Vue.prototype.confirm = function (obj) {
     let str = obj.str ? obj.str : '',
         title = obj.title ? obj.title : '提示',
         btnText = obj.btnText ? obj.btnText : '确定',
@@ -134,7 +151,7 @@ Vue.prototype.confirm = function(obj) {
         });
 };
 //整理全局错误信息
-Vue.prototype.error = function(str) {
+Vue.prototype.error = function (str) {
     Message({
         message: str,
         type: 'warning'
@@ -142,7 +159,7 @@ Vue.prototype.error = function(str) {
 };
 
 //整理全局成功信息
-Vue.prototype.success = function(str) {
+Vue.prototype.success = function (str) {
     Message({
         message: str,
         type: 'success'
@@ -150,8 +167,8 @@ Vue.prototype.success = function(str) {
 };
 
 // 升降序
-Vue.prototype.sort = function(str, type) {
-    return function(a, b) {
+Vue.prototype.sort = function (str, type) {
+    return function (a, b) {
         if (type == 'up') {
             return a[str] - b[str];
         } else if (type == 'down') {
@@ -164,7 +181,7 @@ Vue.prototype.sort = function(str, type) {
 Vue.prototype.$eventHub = Vue.prototype.$eventHub || new Vue()
 
 // 设置浏览器窗口大小
-window.onresize = function(e) {
+window.onresize = function (e) {
     store.commit('changeWindowSize', {
         innerWidth: e.target.innerWidth,
         innerHeight: e.target.innerHeight

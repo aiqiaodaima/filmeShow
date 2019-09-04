@@ -115,9 +115,6 @@
           // planDate: '2019-09-04'
           // planDate:dateFormat("YYYY-mm-dd", new Date())
         }
-        // this.tenantId = terminalInfo.tenantId;
-        // this.terminalCode = terminalInfo.code
-        // this.status = terminalInfo.status ? "启用" : "暂停"
         this.$ctmList.templateT3Detail(httpObj).then(res => {
           console.log(res)
           if (res.code === 200 && res.data) {
