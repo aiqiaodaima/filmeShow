@@ -115,7 +115,7 @@
           // planDate: '2019-09-05'
           // planDate:dateFormat("YYYY-mm-dd", new Date())
         }
-        this.$ctmList.templateT3Detail(httpObj).then(res => {
+        this.$ctmList.templateDetail(httpObj).then(res => {
           console.log(res)
           if (res.code === 200 && res.data) {
             this.classObject[res.data.template.backgroundColor] = true;

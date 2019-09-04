@@ -126,7 +126,7 @@ module.exports = {
         contentBase: path.join(__dirname, 'dist'),
         // host: '127.0.0.1',
         // host:'192.168.0.100',
-        host:'192.168.100.124',
+        host:'10.200.1.207',
         port: 10468,
         proxy: {
             '/api/': {
