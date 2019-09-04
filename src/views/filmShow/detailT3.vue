@@ -118,6 +118,7 @@
         this.$ctmList.templateDetail(httpObj).then(res => {
           console.log(res)
           if (res.code === 200 && res.data) {
+            this.arrList = [];
             this.classObject[res.data.template.backgroundColor] = true;
             // this.arrList = res.data.planMovieListPage.list
             this.swiperNum = Math.ceil(res.data.planMovieListPage.total / this.pageSize)
@@ -141,7 +142,11 @@
       this.timer = setInterval(() => {
         this.dateTime = new Date().toLocaleString(); // 修改数据date
       }, 1000)
+      this.timer2 = setInterval(() => {
+       this.getList()
+      }, 10000)
       this.getList()
+      
     },
     beforeDestroy() {
       if (this.timer) {
@@ -220,7 +225,7 @@
 
   .content-show {
     padding: 0 6rem;
-    margin-top: 3.2rem;
+    margin-top: 1.2rem;
 
     .item-div {
       .p-title {
