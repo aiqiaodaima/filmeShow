@@ -79,7 +79,7 @@
         swiperOption: {
           slidesPerView: 'auto',
           autoplay: {
-            delay: 5000,
+            delay: 10000,
             disableOnInteraction: false
           },
           loop: true,
@@ -112,7 +112,7 @@
           pageNum: this.pageNum,
           // pageSize: this.pageSize,
           pageSize: 100,
-          // planDate: '2019-09-04'
+          // planDate: '2019-09-05'
           // planDate:dateFormat("YYYY-mm-dd", new Date())
         }
         this.$ctmList.templateT3Detail(httpObj).then(res => {
@@ -174,21 +174,21 @@
   .bg_contain {
     background-image: linear-gradient(-135deg, #131720 0%, #1E2643 100%);
 
-
+  // height: 100vh;
+  // overflow: hidden;
     min-height: 100vh;
 
     // padding-left: 120px;
     header {
       background-image: url(./bglight.png);
       background-repeat: no-repeat;
-      padding: 80px 0 0 120px;
+      padding: 2rem 0 0 6rem;
       position: relative;
 
       .en_word {
-        width: 265px;
         background-image: linear-gradient(-90deg, #14275E 0%, #6690FF 100%);
         font-family: DINAlternate-Bold;
-        font-size: 28px;
+        font-size: 1.4rem;
         color: transparent;
         -webkit-background-clip: text;
         letter-spacing: 0;
@@ -197,56 +197,41 @@
 
       .ch_word {
         font-family: PingFangSC-Semibold;
-        font-size: 64px;
+        font-size: 3.2rem;
         color: #FFFFFF;
         letter-spacing: 0;
       }
 
       .right-header {
         position: absolute;
-        top: 57px;
-        right: 28px;
+        top: 2rem;
+        right: 1.4rem;
 
         .code_word {
           font-family: PingFangSC-Semibold;
-          font-size: 24px;
+          font-size: 1.2rem;
           color: #6F80B0;
           letter-spacing: 0;
-          margin-bottom: 12px;
-        }
-
-        .status_word {
-          position: absolute;
-          right: 0;
-          text-align: center;
-          width: 90px;
-          height: 40px;
-          line-height: 40px;
-          background: #38AD65;
-          border-radius: 10px;
-          font-family: PingFang-SC-Bold;
-          font-size: 24px;
-          color: #FFFFFF;
-          letter-spacing: 0;
+          margin-bottom: .6rem;
         }
       }
     }
   }
 
   .content-show {
-    padding: 0 120px;
-    margin-top: 64px;
+    padding: 0 6rem;
+    margin-top: 3.2rem;
 
     .item-div {
       .p-title {
         font-family: PingFangSC-Semibold;
-        font-size: 44px;
+        font-size: 2.2rem;
         color: #FFFFFF;
         letter-spacing: 0;
 
         span {
           font-family: PingFangSC-Regular;
-          font-size: 28px;
+          font-size: 1.4rem;
           color: #FFFFFF;
           letter-spacing: 0;
           text-align: right;
@@ -257,12 +242,12 @@
           border: 1px solid #445380;
           border-radius: 10px;
           font-family: PingFangSC-Semibold;
-          padding: 0 8px;
-          font-size: 22px;
+          padding: 0 .4rem;
+          font-size: 1.1rem;
           color: #C8D6FF;
           letter-spacing: 0;
           text-align: center;
-          margin-right: 8px;
+          margin-right: .4rem;
         }
       }
 
@@ -270,18 +255,18 @@
       .ul-playTime {
         display: flex;
         flex-wrap: wrap;
-        margin-top: 32px;
+        margin-top: 1rem;
 
         li {
           background-image: linear-gradient(90deg, #212C53 0%, #313E5F 100%);
           box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.20);
           border-radius: 10px;
           padding: 15px 24px;
-          margin: 0 36px 30px 0;
+          margin: 0 1.5rem 1.2rem 0;
 
           .movie-time {
             font-family: DINAlternate-Bold;
-            font-size: 34px;
+            font-size: 1.7rem;
             color: #FFFFFF;
             letter-spacing: 0;
           }
@@ -289,14 +274,15 @@
           .movie-price {
             .vip_price {
               font-family: DINAlternate-Bold;
-              font-size: 22px;
+              font-size: 1.1rem;
               color: #FD9918;
               letter-spacing: 0;
             }
 
             .normal_price {
               font-family: DINAlternate-Bold;
-              font-size: 18px;
+              font-size: .9rem
+              ;
               color: #6F80B0;
               letter-spacing: 0;
             }
