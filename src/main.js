@@ -71,6 +71,13 @@ router.beforeEach((to, from, next) => {
     }else{
         next()
     }
+    if(to.path.indexOf("/cms-mvs/page/") != -1 ){
+        console.log('进来了--/cms-mvs/page')
+        next({ path: '/login' })
+    }else{
+        next();
+    }
+
     let token = localStorage.getItem('token');
     NProgress.start();
     // if(to.path.indexOf("/cms-mvs/page/") != -1 ){
