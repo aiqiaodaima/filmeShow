@@ -48,28 +48,36 @@
             this.error(res.data);
           }
         })
-      },
+      }
+    },
+    created() {
+      if(localStorage.ctmRemberTerminal){
+        this.$router.push({
+          path: `detailT3`
+        })
+      }
+      // document.title = document.body.offsetWidth
+      // console.log(document.body.offsetWidth)
     }
   }
 </script>
 <style lang="scss" scoped>
+  // 1rem = 20px;
   .bg_contain {
     background-image: linear-gradient(-135deg, #131720 0%, #1E2643 100%);
-
-
     height: 100vh;
 
     // padding-left: 120px;
     header {
       background-image: url(./bglight.png);
       background-repeat: no-repeat;
-      padding: 80px 0 0 120px;
+      padding: 2rem 0 0 6rem;
 
       .en_word {
-        width: 265px;
+        // width: 265px;
         background-image: linear-gradient(-90deg, #14275E 0%, #6690FF 100%);
         font-family: DINAlternate-Bold;
-        font-size: 28px;
+        font-size: 1.4rem;
         color: transparent;
         -webkit-background-clip: text;
         letter-spacing: 0;
@@ -78,7 +86,7 @@
 
       .ch_word {
         font-family: PingFangSC-Semibold;
-        font-size: 64px;
+        font-size: 3.2rem;
         color: #FFFFFF;
         letter-spacing: 0;
       }
@@ -86,20 +94,20 @@
   }
 
   .content_div {
-    padding-left: 120px;
+    padding-left: 6rem;
 
     .tips_p {
-      margin-top: 64px;
+      margin-top: 3.2rem;
       font-family: PingFang-SC-Bold;
-      font-size: 28px;
+      font-size: 1.4rem;
       color: #FFFFFF;
       letter-spacing: 0;
     }
 
     .licenseKey_input {
-      width: 640px;
-      height: 120px;
-      margin-top: 24px;
+      width: 32rem;
+      height: 6rem;
+      margin-top: 1.2rem;
 
       box-shadow: 0 15px 50px 0 rgba(18, 63, 192, 0.60);
       border-radius: 10px;
@@ -107,23 +115,24 @@
       /deep/ .el-input__inner {
         border: 2px solid #FFFFFF;
         background: #111625;
-        height: 120px;
+        height: 6rem;
         font-family: DINAlternate-Bold;
-        font-size: 42px;
+        font-size: 2.1rem;
         color: #FFFFFF;
         letter-spacing: 0;
       }
     }
 
     .tips_p2 {
-      margin-top: 30px;
+      margin-top: 1.5rem;
       display: flex;
       align-items: center;
+
       span {
         display: block;
         margin: 0 12px;
         font-family: PingFangSC-Semibold;
-        font-size: 24px;
+        font-size: 1.2rem;
         color: #6F80B0;
         letter-spacing: 0;
       }
@@ -131,13 +140,13 @@
 
     .btn_login {
       cursor: pointer;
-      margin-top: 92px;
-      width: 185px;
-      height: 80px;
+      margin-top: 4.6rem;
+      width: 9.3rem;
+      height: 4rem;
       background-image: linear-gradient(-225deg, #537BE6 0%, #94B1FF 100%);
       border-radius: 10px;
       font-family: PingFangSC-Semibold;
-      font-size: 32px;
+      font-size: 1.6rem;
       color: #FFFFFF;
       letter-spacing: 0;
       box-shadow: 5px 5px 50px #537BE6;
@@ -156,4 +165,7 @@
     border: 1px solid #FFFFFF;
     border-radius: 10px;
   }
+</style>
+// <style lang="scss">
+  // 
 </style>

@@ -126,24 +126,21 @@
   }
 </script>
 <style lang="scss" scoped>
+  // 1rem = 20px;
   .bg_contain {
     background-image: linear-gradient(-135deg, #131720 0%, #1E2643 100%);
-
-
     height: 100vh;
-
     // padding-left: 120px;
     header {
       background-image: url(./bglight.png);
       background-repeat: no-repeat;
-      padding: 80px 0 0 120px;
+      padding: 2rem 0 0 6rem;
       position: relative;
 
       .en_word {
-        width: 265px;
         background-image: linear-gradient(-90deg, #14275E 0%, #6690FF 100%);
         font-family: DINAlternate-Bold;
-        font-size: 28px;
+        font-size: 1.4rem;
         color: transparent;
         -webkit-background-clip: text;
         letter-spacing: 0;
@@ -152,35 +149,35 @@
 
       .ch_word {
         font-family: PingFangSC-Semibold;
-        font-size: 64px;
+        font-size: 3.2rem;
         color: #FFFFFF;
         letter-spacing: 0;
       }
 
       .right-header {
         position: absolute;
-        top: 84px;
-        right: 28px;
+        top: 3.2rem;
+        right: 1.4rem;
 
         .code_word {
           font-family: PingFangSC-Semibold;
-          font-size: 24px;
+          font-size: 1.2rem;
           color: #6F80B0;
           letter-spacing: 0;
-          margin-bottom: 12px;
+          margin-bottom: .6rem;
         }
 
         .status_word {
           position: absolute;
           right: 0;
           text-align: center;
-          width: 90px;
-          height: 40px;
-          line-height: 40px;
+          width: 4.5rem;
+          height: 2rem;
+          line-height: 2rem;
           background: #38AD65;
           border-radius: 10px;
           font-family: PingFang-SC-Bold;
-          font-size: 24px;
+          font-size: 1.2rem;
           color: #FFFFFF;
           letter-spacing: 0;
         }
@@ -189,48 +186,44 @@
   }
 
   .content-show {
-    padding-left: 120px;
-    margin-top: 64px;
+    padding-left: 6rem;
+    margin-top: 3.2rem;
     .single-carousel{
-      width: 724px;
-      height: 407px;
+      width: 36.2rem;
+      height: 20.3rem;
       cursor: pointer;
     }
      img {
-      width: 724px;
-      height: 407px;
+      width: 36.2rem;
+      height: 20.3rem;
     }
 
     .swiper-slide {
-      width: 754px !important;
+      width: 37.7rem !important;
     }
 
     .tip-p {
       font-family: PingFang-SC-Bold;
-      font-size: 28px;
+      font-size: 1.4rem;
       color: #FFFFFF;
       letter-spacing: 0;
     }
     .swiper-pagination{
       position: relative;
       text-align: left;
-      margin-top:70px; 
+      margin-top:3.5rem; 
     }
     /deep/ .swiper-pagination-bullet {
-      width: 32px;
-      height: 8px;
+      width: 1.6rem;
+      height: .4rem;
       background: #404B6B;
       border-radius: 7.5px;
     }
     /deep/ .swiper-pagination-bullet-active{
-      width: 62px;
+      width: 3.1rem;
       background-image: linear-gradient(-270deg, #537BE6 2%, #94B1FF 100%);
       box-shadow: 0 5px 20px 0 #123FC0;
       border-radius: 7.5px;
     }
-
-
-
-
   }
 </style>
