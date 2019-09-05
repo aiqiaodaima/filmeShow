@@ -37,9 +37,9 @@
         </li>
       </ul>
     </div>
-    <div class="btn-area">
+    <!-- <div class="btn-area">
       <el-button type="primary" @click="$router.go(-1)">返回</el-button>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -101,8 +101,7 @@
           observeParents: true, //修改swiper的父元素时，自动初始化swiper 
           observeSlideChildren:true,
           grabCursor: true,
-          centeredSlides: true,
-          // slidesPerView: 5,
+          // centeredSlides: true,
           slidesPerView: 'auto',
           
           speed: 1000,
