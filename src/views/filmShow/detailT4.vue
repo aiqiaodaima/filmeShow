@@ -1,7 +1,7 @@
 <template>
   <div class="bg_contain">
     <header>
-      <p class="en_word">MOVIE NEWS</p>
+      <!-- <p class="en_word">MOVIE NEWS</p> -->
       <p class="ch_word">今日影讯</p>
     </header>
     <div class="content-show">
@@ -48,6 +48,7 @@
             delay: 5000,
             disableOnInteraction: false
           },
+          // direction : 'vertical',
           // spaceBetween: 40,
           // pagination: {
           //   el: '.swiper-pagination',
@@ -74,7 +75,7 @@
           pageNum: this.pageNum,
           // pageSize: this.pageSize,
           pageSize: 100,
-          // planDate: '2019-09-06'
+          planDate: '2019-09-06'
           // planDate:dateFormat("YYYY-mm-dd", new Date())
         }
         this.$ctmList.templateDetail(httpObj).then(res => {
@@ -118,13 +119,13 @@
     header {
       background-image: url(./bglight.png);
       background-repeat: no-repeat;
-      padding: 4rem 0 0 6rem;
+      padding: 1rem 0 0 6rem;
       position: relative;
 
       .en_word {
         background-image: linear-gradient(-90deg, #14275E 0%, #6690FF 100%);
         font-family: DINAlternate-Bold;
-        font-size: 28px;
+        font-size: 1.4rem;
         color: transparent;
         -webkit-background-clip: text;
         letter-spacing: 0;
@@ -133,7 +134,7 @@
 
       .ch_word {
         font-family: PingFangSC-Semibold;
-        font-size: 3.2rem;
+        font-size: 2.6rem;
         color: #FFFFFF;
         letter-spacing: 0;
       }
