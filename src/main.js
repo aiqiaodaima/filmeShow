@@ -8,6 +8,7 @@ import routes from './router/index';
 import NProgress from 'nprogress';
 import axios from 'axios';
 import 'nprogress/nprogress.css';
+// import 'lib-flexible'
 import {
     MessageBox,
     Message
@@ -53,29 +54,37 @@ const setGlobalTopNavs = function (to, next) {
 
 Vue.use(require('vue-wechat-title'));
 router.beforeEach((to, from, next) => {
-    if (to.query.license) {
-        let httpObj = {
-            licenseKey: to.query.license,
-            type: 1 // 账号类型,1排期展示 2语言播报
-        }
-        console.log(Vue.prototype.$ctmList)
-        Vue.prototype.$ctmList.filmLogin(httpObj).then(res => {
-            if (res.code === 200 && res.data) {
-                localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
-                next();
-            } else {
-                Vue.prototype.error(res.data);
-                next();
-            }
-        })
-    }else{
+    if (localStorage.ctmRemberTerminal) {
+        console.log(222)
         next()
-    }
-    if(to.path.indexOf("/cms-mvs/page/") != -1 ){
-        console.log('进来了--/cms-mvs/page')
-        next({ path: '/login' })
-    }else{
-        next();
+        // next({
+        //     path: '/detailT3'
+        // })
+    } else {
+        if (to.query.license) {
+            console.log(to.query.license)
+            let httpObj = {
+                licenseKey: to.query.license,
+                type: 1 // 账号类型,1排期展示 2语言播报
+            }
+            console.log(Vue.prototype.$ctmList)
+            Vue.prototype.$ctmList.filmLogin(httpObj).then(res => {
+                if (res.code === 200 && res.data) {
+                    localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
+                    next();
+                } else {
+                    Vue.prototype.error(res.data);
+                    next();
+                }
+            })
+        } else if (to.path.indexOf("/cms-mvs/page/") != -1) {
+            console.log('进来了--/cms-mvs/page')
+            next({
+                path: '/login'
+            })
+        } else {
+            next();
+        }
     }
 
     let token = localStorage.getItem('token');
