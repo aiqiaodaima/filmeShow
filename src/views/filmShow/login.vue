@@ -51,18 +51,17 @@
       }
     },
     created() {
-      if(localStorage.ctmRemberTerminal){
-        if(this.$route.query.template)
+      if (localStorage.ctmRemberTerminal) {
+        if (this.$route.query.template) {
           this.$router.push({
             path: `detail${this.$route.query.template}`
           })
-        }else{
+        } else {
           this.$router.push({
-            path: `detailT3`
+            path: `swiperList`
           })
         }
-      // document.title = document.body.offsetWidth
-      // console.log(document.body.offsetWidth)
+      }
     }
   }
 </script>

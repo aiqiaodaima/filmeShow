@@ -112,7 +112,7 @@
   // 1rem = 20px;
   .bg_contain {
     background-image: linear-gradient(-135deg, #131720 0%, #1E2643 100%);
-    height: 100vh;
+    min-height: 100vh;
 
     // padding-left: 120px;
     header {
