@@ -104,8 +104,17 @@
       }
     },
     mounted() {
+      
+       this.timer = setInterval(() => {
+       this.getList()
+      }, 10000)
       this.getList()
       // this.translateRow()
+    },
+     beforeDestroy() {
+      if (this.timer) {
+        clearInterval(this.timer); // 在Vue实例销毁前，清除我们的定时器
+      }
     }
   }
 </script>
@@ -166,7 +175,7 @@
         div {
           text-align: center;
           font-family: PingFangSC-Regular;
-          font-size: 1.2rem;
+          font-size: 1.6rem;
           color: #FFFFFF;
           text-align: center;
           letter-spacing: 0;
