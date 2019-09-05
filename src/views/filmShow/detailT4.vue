@@ -70,7 +70,7 @@
           tenantId: terminalInfo.tenantId, // 租户ID
           terminalCode: terminalInfo.code, // 账号的状态
           terminalKey: terminalInfo.password, // 终端账号密码
-          templateCode: "T3", // 随便给的值
+          templateCode: "T4", // 随便给的值
           pageNum: this.pageNum,
           // pageSize: this.pageSize,
           pageSize: 100,
