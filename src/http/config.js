@@ -32,6 +32,7 @@ switch (domain) {
         break
     default:
     config.baseURL = protocol + '//apidev.oristarcloud.com'
+    // config.baseURL = protocol + '//apitest.oristarcloud.com'
         break;
 }
 export default config;
