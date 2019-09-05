@@ -86,8 +86,8 @@
             this.pageSize = res.data.template.pageSize || "3"
             console.log(res.data.planMovieListPage)
             res.data.planMovieListPage.list.forEach(item => {
-              item.timeList && item.timeList.forEach(a => { 
-                item = Object.assign({},item,a)
+              item.timeList && item.timeList.forEach(a => {
+                item = Object.assign({}, item, a)
                 tempArr.push(item)
               })
             });
@@ -104,14 +104,13 @@
       }
     },
     mounted() {
-      
-       this.timer = setInterval(() => {
-       this.getList()
+      this.timer = setInterval(() => {
+        this.getList()
       }, 10000)
       this.getList()
       // this.translateRow()
     },
-     beforeDestroy() {
+    beforeDestroy() {
       if (this.timer) {
         clearInterval(this.timer); // 在Vue实例销毁前，清除我们的定时器
       }
@@ -181,7 +180,7 @@
           letter-spacing: 0;
           overflow: hidden;
           white-space: nowrap;
-          text-overflow: ellipsis;      //超出部分以省略号显示
+          text-overflow: ellipsis; //超出部分以省略号显示
           white-space: nowrap;
         }
       }
