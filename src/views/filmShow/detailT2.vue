@@ -127,12 +127,17 @@
         planMovieList: [], // 影片信息
         timeList: [], // 时间信息
         vipPrice: "",
-        commonPrice: ""
+        commonPrice: "",
+        websock:null,
+        timeoutNum: 30000,
+        heart:null,
+
       }
     },
     methods: {
       templateDetail() { // 获取详细信息
         let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal)
+        console.log(terminalInfo)
         let httpObj = {
           tenantId: terminalInfo.tenantId, // 租户ID
           terminalCode: terminalInfo.code, // 账号的状态
@@ -160,10 +165,85 @@
             this.error(res.msg)
           }
         })
-      }
+      },
+      heartReset() {
+                clearInterval(this.heart);
+                this.heartStart();
+            },
+            heartStart() {
+                this.heart = setInterval(() => {
+                    this.websocketsend('holdOn')
+                }, this.timeoutNum)
+            },
+
+            reconnect() {
+                if(this.lockReconnect) {
+                    return
+                }
+                this.lockReconnect = true
+                this.reInit = setTimeout( () => {     //没连接上会一直重连，设置延迟避免请求过多
+                this.initWebSocket();
+                this.lockReconnect = false
+                }, 4000);
+            },
+
+            initWebSocket(){ //初始化weosocket
+                // console.log("开始重连")
+                let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal)
+                this.websock = new WebSocket(`${this.$wsUrl}/${terminalInfo.tenantId}/${terminalInfo.cinemaUid}/${terminalInfo.passwordMd5}`);
+                this.websock.onopen = this.websocketonopen;
+                this.websock.onmessage = this.websocketonmessage;
+                this.websock.onerror = this.websocketonerror;
+                this.websock.onclose = this.websocketclose;
+            },
+            websocketonopen(e){ //连接建立之后执行send方法发送数据
+                // console.log('setUpWS', e)
+                this.heartReset()
+            },
+            websocketonerror(e){//连接建立失败重连
+                // console.log('connectErr', e)
+                this.reconnect()
+                
+            },
+            websocketonmessage(e){
+                // console.log('receiveMessage', e)
+                // console.log(this.$route)
+                // if(this.$route.name != 'toHome') return
+                if(e.data != '连接成功' && e.data != 'holdOn') {
+                  let data = (JSON.parse(e.data))
+                     if(data.type == 1){
+                      console.log(1)
+                      this.templateDetail()
+                    }
+                    
+                }
+                this.heartReset()
+            },  
+            websocketsend(Data){//数据发送
+                // console.log('sendMessage', Data)
+                this.websock.send(Data)
+            },
+            websocketclose(e){  //关闭
+                // console.log('close', e)
+                this.reconnect()
+            },
+
+            //切换页面干掉webSocket
+            killWebSocket() {
+                clearInterval(this.heart);
+                this.lockReconnect = true;
+                clearInterval(this.reInit);
+                this.websock.onclose = null;
+                this.websock.onerror = null;
+                this.websock = null;
+            },
     },
     created() {
       this.templateDetail()
+      this.initWebSocket()
+    },
+    beforeDestroy() {
+      this.killWebSocket()
     }
   }
 </script>

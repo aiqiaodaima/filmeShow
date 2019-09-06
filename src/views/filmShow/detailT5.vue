@@ -4,13 +4,13 @@
       <ul class="out-carousel">
         <li class="big-carousel">
           <div class="single-carousel" :class="classObject" v-if="planMovieList.length">
-            <swiper :options="swiperOption" ref="mySwiper">
-              <swiper-slide v-for="(item,index) in planMovieList" :key="index">
-                <div style="height:340px">
-                  <img :src="item.moviePicUrl" alt="">
+            <swiper style="height:100%; width: 100%" :options="swiperOption" ref="mySwiper">
+              <swiper-slide style="height:100%; width: 100%" v-for="(item,index) in planMovieList" :key="index">
+                <div style="height:100%; width: 100%">
+                  <img style="height:100%; width: 100%" :src="item" alt="">
                 </div>
-                <p class="tip-white">{{item.movieName}}</p>
-                <div class="swiperOption_v">
+                <!-- <p class="tip-white">{{item.movieName}}</p> -->
+                <!-- <div class="swiperOption_v">
                   <swiper :options="swiperOptionv" v-if="item.timeList">
                     <swiper-slide v-for="(item2,index2) in item.timeList" :key="index2">
                       <div class="flim-Info">
@@ -30,14 +30,14 @@
                       </div>
                     </swiper-slide>
                   </swiper>
-                </div>
+                </div> -->
               </swiper-slide>
             </swiper>
           </div>
         </li>
       </ul>
     </div>
-    <div class="btn-area">
+    <div v-if="!planMovieList.length" class="btn-area">
       <el-button type="primary" @click="$router.go(-1)">返回</el-button>
     </div>
   </div>
@@ -74,18 +74,18 @@
           observer: true, //修改swiper自己或子元素时，自动初始化swiper 
           observeParents: true, //修改swiper的父元素时，自动初始化swiper 
           observeSlideChildren:true,
-          slidesPerView: 5,
-          spaceBetween: 15,
+          // slidesPerView: 5,
+          // spaceBetween: 15,
           speed: 300,
           autoplay: { // 自动切换
-            delay: 1000,
+            delay: 2000,
             stopOnLastSlide: false,
             disableOnInteraction: false,
           },
           loop: true,
           loopAdditionalSlides:1,
           // slidesPerView: '5',
-          loopedSlides: 5,
+          // loopedSlides: 5,
           pagination: {
             el: '.swiper-pagination',
             clickable: true
@@ -127,11 +127,14 @@
         planMovieList: [], // 影片信息
         timeList: [], // 时间信息
         vipPrice: "",
-        commonPrice: ""
+        commonPrice: "",
+        websock:null,
+        timeoutNum: 30000,
+        heart:null,
       }
     },
     methods: {
-      templateDetail() { // 获取详细信息
+      templateAd() { // 获取详细信息
         let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal)
         let httpObj = {
           tenantId: terminalInfo.tenantId, // 租户ID
@@ -141,13 +144,13 @@
           // templateCode: 'T1'
         }
         console.log(httpObj)
-        this.$ctmList.templateDetail(httpObj).then(res => {
+        this.$ctmList.templateAd(httpObj).then(res => {
           console.log(res)
           if (res.code === 200) {
-            this.planMovieList = res.data.planMovieList;
-            for(let i=0;i<3;i++){
-              this.planMovieList = this.planMovieList.concat(this.planMovieList)
-            }
+            this.planMovieList = res.data.picUrlList;
+            // for(let i=0;i<3;i++){
+            //   this.planMovieList = this.planMovieList.concat(this.planMovieList)
+            // }
             this.templateStyle = res.data.template;
             if(res.data.template.backgroundColor.indexOf('#')== 0 || !res.data.template.backgroundColor) res.data.template.backgroundColor = "balckBgc"
             this.classObject[res.data.template.backgroundColor] = true;
@@ -160,10 +163,89 @@
             this.error(res.msg)
           }
         })
-      }
+      },
+      heartReset() {
+                clearInterval(this.heart);
+                this.heartStart();
+            },
+            heartStart() {
+                this.heart = setInterval(() => {
+                    this.websocketsend('holdOn')
+                }, this.timeoutNum)
+            },
+
+            reconnect() {
+                if(this.lockReconnect) {
+                    return
+                }
+                this.lockReconnect = true
+                this.reInit = setTimeout( () => {     //没连接上会一直重连，设置延迟避免请求过多
+                this.initWebSocket();
+                this.lockReconnect = false
+                }, 4000);
+            },
+
+            initWebSocket(){ //初始化weosocket
+                // console.log("开始重连")
+                let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal)
+                this.websock = new WebSocket(`${this.$wsUrl}/${terminalInfo.tenantId}/${terminalInfo.cinemaUid}/${terminalInfo.passwordMd5}`);
+                this.websock.onopen = this.websocketonopen;
+                this.websock.onmessage = this.websocketonmessage;
+                this.websock.onerror = this.websocketonerror;
+                this.websock.onclose = this.websocketclose;
+            },
+            websocketonopen(e){ //连接建立之后执行send方法发送数据
+                // console.log('setUpWS', e)
+                this.heartReset()
+            },
+            websocketonerror(e){//连接建立失败重连
+                // console.log('connectErr', e)
+                this.reconnect()
+                
+            },
+            websocketonmessage(e){
+                // console.log('receiveMessage', e)
+                // console.log(this.$route)
+                // if(this.$route.name != 'toHome') return
+                if(e.data != '连接成功' && e.data != 'holdOn') {
+                  let data = (JSON.parse(e.data))
+                     if(data.type == 1){
+                      console.log(1)
+                      this.templateAd()
+                    }
+                    
+                }
+                this.heartReset()
+            },  
+            websocketsend(Data){//数据发送
+                // console.log('sendMessage', Data)
+                this.websock.send(Data)
+            },
+            websocketclose(e){  //关闭
+                // console.log('close', e)
+                this.reconnect()
+            },
+
+            //切换页面干掉webSocket
+            killWebSocket() {
+                clearInterval(this.heart);
+                this.lockReconnect = true;
+                clearInterval(this.reInit);
+                this.websock.onclose = null;
+                this.websock.onerror = null;
+                this.websock = null;
+            },
     },
     created() {
-      this.templateDetail()
+      this.templateAd()
+      this.initWebSocket()
+    },
+    beforeDestroy() {
+      // if (this.timer) {
+      //   clearInterval(this.timer); // 在Vue实例销毁前，清除我们的定时器
+      // }
+      this.killWebSocket()
+      
     }
   }
 </script>
@@ -193,10 +275,10 @@
   }
 
   .contain {
-    img {
-      width: 238px;
-      height: 340px;
-    }
+    // img {
+    //   width: 238px;
+    //   height: 340px;
+    // }
 
     // height: 90vh;
     .header-title {
@@ -233,7 +315,7 @@
             height: 100vh;
 
             .swiper-slide {
-              padding: 1em;
+              // padding: 1em;
 
               .tip-white {
                 width: 230px;
