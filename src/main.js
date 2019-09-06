@@ -18,7 +18,13 @@ import './assets/iconfont/iconfont.css'
 Vue.use(VueRouter);
 Vue.use(api);
 Vue.prototype.axios = axios;
+let wsUrlHost = "pos";
+if(location.host.indexOf('dev')>-1) wsUrlHost = 'devpos';
+if(location.host.indexOf('test')>-1) wsUrlHost = 'testpos';
+if(location.host.indexOf('pre')>-1) wsUrlHost = 'prepos';
+let urlArr = location.host.split('.')
 
+Vue.prototype.$wsUrl = process.env.NODE_ENV == 'production' ? `wss://api${wsUrlHost}${urlArr[1]}${urlArr[2]}/websocket/server/` : 'wss://apitestpos.oristarcloud.com/websocket/server'
 // Vue.use(ElementUI)
 const router = new VueRouter({
     mode: 'history',
