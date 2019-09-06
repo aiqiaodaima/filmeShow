@@ -55,13 +55,19 @@ import md5 from 'js-md5'
       }
     },
     created() {
+      let routeQuery = this.$route.query;
+      if(routeQuery.logout == 1) return localStorage.removeItem('ctmRemberTerminal')
       if (localStorage.ctmRemberTerminal) {
-        if (this.$route.query.template) {
+        let userInfo = JSON.parse(localStorage.ctmRemberTerminal)
+        if(routeQuery.license && routeQuery.license != userInfo.licenseKey){
+          return this.licenseKey = routeQuery.license
+        }
+        if (routeQuery.template){
           this.$router.push({
-            path: `detail${this.$route.query.template}`
+            path: `detailT${routeQuery.template}?templateCode=T${routeQuery.template}`
           })
         } else {
-          this.$router.push({
+          this.$router.replace({
             path: `swiperList`
           })
         }

@@ -7,6 +7,7 @@ import store from './vuex/index';
 import routes from './router/index';
 import NProgress from 'nprogress';
 import axios from 'axios';
+import md5 from 'js-md5'
 import 'nprogress/nprogress.css';
 // import 'lib-flexible'
 import {
@@ -60,8 +61,8 @@ const setGlobalTopNavs = function (to, next) {
 
 Vue.use(require('vue-wechat-title'));
 router.beforeEach((to, from, next) => {
+    NProgress.done();
     if (localStorage.ctmRemberTerminal) {
-        console.log(222)
         next()
         // next({
         //     path: '/detailT3'
@@ -76,6 +77,7 @@ router.beforeEach((to, from, next) => {
             console.log(Vue.prototype.$ctmList)
             Vue.prototype.$ctmList.filmLogin(httpObj).then(res => {
                 if (res.code === 200 && res.data) {
+                    res.data.passwordMd5 = md5(res.data.password)
                     localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
                     next();
                 } else {
@@ -93,7 +95,6 @@ router.beforeEach((to, from, next) => {
         }
     }
 
-    let token = localStorage.getItem('token');
     NProgress.start();
     // if(to.path.indexOf("/cms-mvs/page/") != -1 ){
     //     console.log('进来了--/cms-mvs/page')
