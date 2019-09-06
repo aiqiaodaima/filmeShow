@@ -108,6 +108,13 @@ export const templatecinemaUid	 = params => {  // 后台模版的详细
     params
   })
 }
+export const templateAd = data => {  // 广告
+  return axios({
+    url: '/ticket-gd/display_template/advertise',
+    method: 'post',
+    data
+  })
+}
 export default {
   // 排期展示
   ossUpdata,
@@ -122,5 +129,6 @@ export default {
   deletePhoto,
   templateDetail,
   templatecinemaUid,
-  templateT3Detail
+  templateT3Detail,
+  templateAd
 };
