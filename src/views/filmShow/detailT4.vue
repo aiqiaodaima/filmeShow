@@ -130,7 +130,7 @@
             initWebSocket(){ //初始化weosocket
                 // console.log("开始重连")
                 let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal)
-                this.websock = new WebSocket(`${this.$wsUrl}/${terminalInfo.tenantId}/${terminalInfo.cinemaUid}/${terminalInfo.licenseKey}`);
+                this.websock = new WebSocket(`${this.$wsUrl}/${terminalInfo.tenantId}/${terminalInfo.cinemaUid}/${terminalInfo.passwordMd5}`);
                 this.websock.onopen = this.websocketonopen;
                 this.websock.onmessage = this.websocketonmessage;
                 this.websock.onerror = this.websocketonerror;

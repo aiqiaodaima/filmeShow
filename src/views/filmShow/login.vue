@@ -24,6 +24,8 @@
   </div>
 </template>
 <script>
+import md5 from 'js-md5'
+
   export default {
     data() {
       return {
@@ -42,6 +44,8 @@
               message: '恭喜你，注册成功',
             });
             // this.$store.commit("ctmRemberTerminal",res.data);
+            res.data.passwordMd5 = md5(res.data.password)
+            console.log(res.data)
             localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
             this.$router.push('swiperList')
           } else {
