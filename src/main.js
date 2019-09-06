@@ -25,7 +25,7 @@ if(location.host.indexOf('test')>-1) wsUrlHost = 'testpos';
 if(location.host.indexOf('pre')>-1) wsUrlHost = 'prepos';
 let urlArr = location.host.split('.')
 
-Vue.prototype.$wsUrl = process.env.NODE_ENV == 'production' ? `wss://api${wsUrlHost}${urlArr[1]}${urlArr[2]}/websocket/server/` : 'wss://apitestpos.oristarcloud.com/websocket/server'
+Vue.prototype.$wsUrl = process.env.NODE_ENV == 'production' ? `wss://api${wsUrlHost}${urlArr[1]}${urlArr[2]}/websocket/server/` : 'wss://apitestpos.oristarcloud.com/websocket/server/'
 // Vue.use(ElementUI)
 const router = new VueRouter({
     mode: 'history',
@@ -81,8 +81,9 @@ router.beforeEach((to, from, next) => {
                     localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
                     next();
                 } else {
+                    localStorage.removeItem("ctmRemberTerminal")
                     Vue.prototype.error(res.data);
-                    next();
+                    next({path:'/login'});
                 }
             })
         } else if (to.path.indexOf("/cms-mvs/page/") != -1) {
@@ -95,7 +96,6 @@ router.beforeEach((to, from, next) => {
         }
     }
 
-    NProgress.start();
     // if(to.path.indexOf("/cms-mvs/page/") != -1 ){
     //     console.log('进来了--/cms-mvs/page')
     //     next({ path: '/login' })
@@ -134,7 +134,6 @@ router.beforeEach((to, from, next) => {
     // next();
 });
 router.afterEach((transition) => {
-    NProgress.done();
 });
 
 //整理全局弹出框

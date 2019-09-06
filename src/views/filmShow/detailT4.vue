@@ -182,8 +182,14 @@
       // this.timer = setInterval(() => {
       //   this.getList()
       // }, 10000)
-      this.getList()
+      // if(window.WebSocket){
+      //   this.$alert('支持')
+      // }else{
+      //   this.$alert('bu支持')
+      // }
       this.initWebSocket()
+      this.getList()
+      
       // this.translateRow()
     },
     beforeDestroy() {

@@ -96,6 +96,7 @@
             localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
             this.getList()
           } else {
+            localStorage.removeItem("ctmRemberTerminal")
             this.error(res.data);
           }
         })
@@ -111,21 +112,22 @@
       }
     },
     mounted() {
-      let routeQuery = this.$route.query
-      if(!localStorage.ctmRemberTerminal){
-        if(routeQuery.license){
-          this.filmLogin()
-        }else{
-          this.$router.push('login')
-        }
-      }else{
-        if (routeQuery.template){
-          return this.$router.push({
-            path: `detailT${routeQuery.template}?templateCode=T${routeQuery.template}`
-          })
-        }
-        this.getList()
-      }
+      // let routeQuery = this.$route.query
+      // if(!localStorage.ctmRemberTerminal){
+      //   if(routeQuery.license){
+      //     this.filmLogin()
+      //   }else{
+      //     this.$router.push('login')
+      //   }
+      // }else{
+      //   if (routeQuery.template){
+      //     return this.$router.push({
+      //       path: `detailT${routeQuery.template}?templateCode=T${routeQuery.template}`
+      //     })
+      //   }
+      //   this.getList()
+      // }
+      this.getList()
       // if(this.$route.query.template){
       //   this.goAddress(this.$route.query.template)
       // }

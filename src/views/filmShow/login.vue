@@ -49,6 +49,7 @@ import md5 from 'js-md5'
             localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
             this.$router.push('swiperList')
           } else {
+            localStorage.removeItem("ctmRemberTerminal")
             this.error(res.data);
           }
         })
