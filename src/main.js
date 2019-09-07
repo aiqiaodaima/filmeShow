@@ -57,6 +57,21 @@ router.beforeEach((to, from, next) => {
     if (localStorage.ctmRemberTerminal) {
         console.log(222)
         next()
+        if (to.query.license) {
+            let httpObj = {
+                licenseKey: to.query.license,
+                type: 1 // 账号类型,1排期展示 2语言播报
+            }
+            Vue.prototype.$ctmList.filmLogin(httpObj).then(res => {
+                if (res.code === 200 && res.data) {
+                    localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
+                    next();
+                } else {
+                    Vue.prototype.error(res.data);
+                    next();
+                }
+            })
+        }
         // next({
         //     path: '/detailT3'
         // })

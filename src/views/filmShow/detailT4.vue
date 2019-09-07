@@ -75,7 +75,7 @@
           pageNum: this.pageNum,
           // pageSize: this.pageSize,
           pageSize: 100,
-          planDate: '2019-09-06'
+          // planDate: '2019-09-06'
           // planDate:dateFormat("YYYY-mm-dd", new Date())
         }
         this.$ctmList.templateDetail(httpObj).then(res => {
