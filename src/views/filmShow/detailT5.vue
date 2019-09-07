@@ -4,13 +4,13 @@
       <ul class="out-carousel">
         <li class="big-carousel">
           <div class="single-carousel" :class="classObject" v-if="planMovieList.length">
-            <swiper :options="swiperOption" ref="mySwiper">
-              <swiper-slide v-for="(item,index) in planMovieList" :key="index">
-                <div style="height:340px">
-                  <img :src="item.moviePicUrl" alt="">
+            <swiper style="height:100%; width: 100%" :options="swiperOption" ref="mySwiper">
+              <swiper-slide style="height:100%; width: 100%" v-for="(item,index) in planMovieList" :key="index">
+                <div style="height:100%; width: 100%">
+                  <img style="height:100%; width: 100%" :src="item" alt="">
                 </div>
-                <p class="tip-white">{{item.movieName}}</p>
-                <div class="swiperOption_v">
+                <!-- <p class="tip-white">{{item.movieName}}</p> -->
+                <!-- <div class="swiperOption_v">
                   <swiper :options="swiperOptionv" v-if="item.timeList">
                     <swiper-slide v-for="(item2,index2) in item.timeList" :key="index2">
                       <div class="flim-Info">
@@ -30,14 +30,14 @@
                       </div>
                     </swiper-slide>
                   </swiper>
-                </div>
+                </div> -->
               </swiper-slide>
             </swiper>
           </div>
         </li>
       </ul>
     </div>
-    <div class="btn-area">
+    <div v-if="!planMovieList.length" class="btn-area">
       <el-button type="primary" @click="$router.go(-1)">返回</el-button>
     </div>
   </div>
@@ -74,18 +74,18 @@
           observer: true, //修改swiper自己或子元素时，自动初始化swiper 
           observeParents: true, //修改swiper的父元素时，自动初始化swiper 
           observeSlideChildren:true,
-          slidesPerView: 5,
-          spaceBetween: 15,
+          // slidesPerView: 5,
+          // spaceBetween: 15,
           speed: 300,
           autoplay: { // 自动切换
-            delay: 1000,
+            delay: 2000,
             stopOnLastSlide: false,
             disableOnInteraction: false,
           },
           loop: true,
           loopAdditionalSlides:1,
           // slidesPerView: '5',
-          loopedSlides: 5,
+          // loopedSlides: 5,
           pagination: {
             el: '.swiper-pagination',
             clickable: true
@@ -131,7 +131,7 @@
       }
     },
     methods: {
-      templateDetail() { // 获取详细信息
+      templateAd() { // 获取详细信息
         let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal)
         let httpObj = {
           tenantId: terminalInfo.tenantId, // 租户ID
@@ -141,13 +141,13 @@
           // templateCode: 'T1'
         }
         console.log(httpObj)
-        this.$ctmList.templateDetail(httpObj).then(res => {
+        this.$ctmList.templateAd(httpObj).then(res => {
           console.log(res)
           if (res.code === 200) {
-            this.planMovieList = res.data.planMovieList;
-            for(let i=0;i<3;i++){
-              this.planMovieList = this.planMovieList.concat(this.planMovieList)
-            }
+            this.planMovieList = res.data.picUrlList;
+            // for(let i=0;i<3;i++){
+            //   this.planMovieList = this.planMovieList.concat(this.planMovieList)
+            // }
             this.templateStyle = res.data.template;
             if(res.data.template.backgroundColor.indexOf('#')== 0 || !res.data.template.backgroundColor) res.data.template.backgroundColor = "balckBgc"
             this.classObject[res.data.template.backgroundColor] = true;
@@ -163,7 +163,7 @@
       }
     },
     created() {
-      this.templateDetail()
+      this.templateAd()
     }
   }
 </script>
@@ -193,10 +193,10 @@
   }
 
   .contain {
-    img {
-      width: 238px;
-      height: 340px;
-    }
+    // img {
+    //   width: 238px;
+    //   height: 340px;
+    // }
 
     // height: 90vh;
     .header-title {
@@ -233,7 +233,7 @@
             height: 100vh;
 
             .swiper-slide {
-              padding: 1em;
+              // padding: 1em;
 
               .tip-white {
                 width: 230px;
