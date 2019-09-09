@@ -3,45 +3,20 @@ import config from './config.js'; //倒入默认配置
 import qs from 'qs'; //序列化数据，视服务端的要求
 import store from '../vuex/index';
 import md5 from 'js-md5';
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import routes from '../router/index';
 import {
     MessageBox,
     Message,
     Loading
 } from 'element-ui';
+Vue.use(VueRouter);
+const router = new VueRouter({
+    mode: 'history',
+    routes
+});
 
-/*** 全局loading处理 start ***/
-// let needLoadingRequestCount = 0
-//
-// function showFullScreenLoading() {
-//     if (needLoadingRequestCount === 0) {
-//         startLoading()
-//     }
-//     needLoadingRequestCount++
-// }
-//
-// function tryHideFullScreenLoading() {
-//     if (needLoadingRequestCount <= 0) return
-//     needLoadingRequestCount--
-//     if (needLoadingRequestCount === 0) {
-//         endLoading()
-//     }
-// }
-//
-// let loading
-//
-// function startLoading() {
-//     loading = Loading.service({
-//         lock: true,
-//         text: '拼命加载中…',
-//         spinner: 'el-icon-loading',
-//         background: 'rgba(0, 0, 0, 0.8)'
-//     })
-// }
-//
-// function endLoading() {
-//     loading.close()
-// }
-/*** 全局loading处理 end ***/
 
 export default function $axios(options) {
     return new Promise((resolve, reject) => {
@@ -138,10 +113,11 @@ export default function $axios(options) {
                             message: data.msg,
                             type: 'warning'
                         });
-                        console.log(1111111111111)
-                            // router.push({
-                            //     path: `login`
-                            // });
+                        console.log(1111111111111,this)
+                            router.push({
+                                path: `login`
+                            });
+                            localStorage.clear('ctmRemberTerminal')
                         // window.location.href = '/login';
                         break;
                     default:
