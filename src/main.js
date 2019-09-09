@@ -7,6 +7,7 @@ import store from './vuex/index';
 import routes from './router/index';
 import NProgress from 'nprogress';
 import axios from 'axios';
+import md5 from 'js-md5'
 import 'nprogress/nprogress.css';
 // import 'lib-flexible'
 import {
@@ -18,7 +19,13 @@ import './assets/iconfont/iconfont.css'
 Vue.use(VueRouter);
 Vue.use(api);
 Vue.prototype.axios = axios;
+let wsUrlHost = "pos";
+if(location.host.indexOf('dev')>-1) wsUrlHost = 'devpos';
+if(location.host.indexOf('test')>-1) wsUrlHost = 'testpos';
+if(location.host.indexOf('pre')>-1) wsUrlHost = 'prepos';
+let urlArr = location.host.split('.')
 
+Vue.prototype.$wsUrl = process.env.NODE_ENV == 'production' ? `wss://api${wsUrlHost}${urlArr[1]}${urlArr[2]}/websocket/server/` : 'wss://apitestpos.oristarcloud.com/websocket/server/'
 // Vue.use(ElementUI)
 const router = new VueRouter({
     mode: 'history',
@@ -54,8 +61,8 @@ const setGlobalTopNavs = function (to, next) {
 
 Vue.use(require('vue-wechat-title'));
 router.beforeEach((to, from, next) => {
+    NProgress.done();
     if (localStorage.ctmRemberTerminal) {
-        console.log(222)
         next()
         if (to.query.license) {
             let httpObj = {
@@ -85,11 +92,13 @@ router.beforeEach((to, from, next) => {
             console.log(Vue.prototype.$ctmList)
             Vue.prototype.$ctmList.filmLogin(httpObj).then(res => {
                 if (res.code === 200 && res.data) {
+                    res.data.passwordMd5 = md5(res.data.password)
                     localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
                     next();
                 } else {
+                    localStorage.removeItem("ctmRemberTerminal")
                     Vue.prototype.error(res.data);
-                    next();
+                    next({path:'/login'});
                 }
             })
         } else if (to.path.indexOf("/cms-mvs/page/") != -1) {
@@ -140,7 +149,6 @@ router.beforeEach((to, from, next) => {
     // next();
 });
 router.afterEach((transition) => {
-    NProgress.done();
 });
 
 //整理全局弹出框

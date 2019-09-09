@@ -31,6 +31,7 @@
     swiper,
     swiperSlide
   } from 'vue-awesome-swiper'
+  import md5 from 'js-md5'
   export default {
     components: {
       swiper,
@@ -90,9 +91,12 @@
         this.$ctmList.filmLogin(httpObj).then(res => {
           console.log(res)
           if (res.code === 200 && res.data) {
+            debugger
+            res.data.passwordMd5 = md5(res.data.password)
             localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
             this.getList()
           } else {
+            localStorage.removeItem("ctmRemberTerminal")
             this.error(res.data);
           }
         })
@@ -108,15 +112,22 @@
       }
     },
     mounted() {
-      if(!localStorage.ctmRemberTerminal){
-        if(this.$route.query.licenseKey){
-          this.filmLogin()
-        }else{
-          this.$router.push('login')
-        }
-      }else{
-        this.getList()
-      }
+      // let routeQuery = this.$route.query
+      // if(!localStorage.ctmRemberTerminal){
+      //   if(routeQuery.license){
+      //     this.filmLogin()
+      //   }else{
+      //     this.$router.push('login')
+      //   }
+      // }else{
+      //   if (routeQuery.template){
+      //     return this.$router.push({
+      //       path: `detailT${routeQuery.template}?templateCode=T${routeQuery.template}`
+      //     })
+      //   }
+      //   this.getList()
+      // }
+      this.getList()
       // if(this.$route.query.template){
       //   this.goAddress(this.$route.query.template)
       // }

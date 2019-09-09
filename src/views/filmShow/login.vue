@@ -24,6 +24,8 @@
   </div>
 </template>
 <script>
+import md5 from 'js-md5'
+
   export default {
     data() {
       return {
@@ -42,22 +44,31 @@
               message: '恭喜你，注册成功',
             });
             // this.$store.commit("ctmRemberTerminal",res.data);
+            res.data.passwordMd5 = md5(res.data.password)
+            console.log(res.data)
             localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
             this.$router.push('swiperList')
           } else {
+            localStorage.removeItem("ctmRemberTerminal")
             this.error(res.data);
           }
         })
       }
     },
     created() {
+      let routeQuery = this.$route.query;
+      if(routeQuery.logout == 1) return localStorage.removeItem('ctmRemberTerminal')
       if (localStorage.ctmRemberTerminal) {
-        if (this.$route.query.template) {
+        let userInfo = JSON.parse(localStorage.ctmRemberTerminal)
+        if(routeQuery.license && routeQuery.license != userInfo.licenseKey){
+          return this.licenseKey = routeQuery.license
+        }
+        if (routeQuery.template){
           this.$router.push({
-            path: `detail${this.$route.query.template}`
+            path: `detailT${routeQuery.template}?templateCode=T${routeQuery.template}`
           })
         } else {
-          this.$router.push({
+          this.$router.replace({
             path: `swiperList`
           })
         }
