@@ -51,7 +51,7 @@ import md5 from 'js-md5'
             // console.log(res.data)
             window.localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))  // 记住登陆信息
             //this.$router.push('swiperList')  // 跳转到list 页
-            window.location.href = protocol+ "//" + domain + "/swiperList"
+            window.location.href = protocol+ "//" + domain + "/test"
           } else {
             localStorage.removeItem("ctmRemberTerminal")  // 清楚登陆信息
             this.error(res.data);
