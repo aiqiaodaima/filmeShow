@@ -47,15 +47,15 @@
   </div>
 </template>
 <script>
-  import {
-    swiper,
-    swiperSlide
-  } from 'vue-awesome-swiper'
+  // import {
+  //   swiper,
+  //   swiperSlide
+  // } from 'vue-awesome-swiper'
   export default {
-    components: {
-      swiper,
-      swiperSlide
-    },
+    // components: {
+    //   swiper,
+    //   swiperSlide
+    // },
     data() {
       return {
         swiperOption: {

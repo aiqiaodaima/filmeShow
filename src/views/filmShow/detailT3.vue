@@ -78,15 +78,15 @@
     };
     return fmt;
   }
-  import {
-    swiper,
-    swiperSlide
-  } from 'vue-awesome-swiper'
+  // import {
+  //   swiper,
+  //   swiperSlide
+  // } from 'vue-awesome-swiper'
   export default {
-    components: {
-      swiper,
-      swiperSlide
-    },
+    // components: {
+    //   swiper,
+    //   swiperSlide
+    // },
     data() {
       let that = this
       return {
