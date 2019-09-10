@@ -26,7 +26,7 @@
 </template>
 <script>
 import md5 from 'js-md5'
-
+// import config from ''
   export default {
     data() {
       return {
@@ -44,10 +44,11 @@ import md5 from 'js-md5'
             this.$message({
               message: '恭喜你，注册成功',  // 弹出成功信息
             });
-            res.data.passwordMd5 = md5(res.data.password) // md5加密
-            console.log(res.data)
-            window.localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))  // 记住登陆信息
-            this.$router.push('swiperList')  // 跳转到list 页
+            // res.data.passwordMd5 = md5(res.data.password) // md5加密
+            // console.log(res.data)
+            // window.localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))  // 记住登陆信息
+            //this.$router.push('swiperList')  // 跳转到list 页
+            window.location.href = "/swiperList"
           } else {
             localStorage.removeItem("ctmRemberTerminal")  // 清楚登陆信息
             this.error(res.data);
