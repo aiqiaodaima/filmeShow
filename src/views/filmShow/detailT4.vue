@@ -48,12 +48,6 @@
             delay: 5000,
             disableOnInteraction: false
           },
-          // direction : 'vertical',
-          // spaceBetween: 40,
-          // pagination: {
-          //   el: '.swiper-pagination',
-          //   clickable: true
-          // }
         },
         arrList: [],
         status: 1,
@@ -62,9 +56,9 @@
         pageNum: 1,
         pageSize: 3,
         swiperNum: "",
-        websock:null,
+        websock: null,
         timeoutNum: 30000,
-        heart:null,
+        heart: null,
       }
     },
     methods: {
@@ -107,76 +101,77 @@
         })
       },
       heartReset() {
-                clearInterval(this.heart);
-                this.heartStart();
-            },
-            heartStart() {
-                this.heart = setInterval(() => {
-                    this.websocketsend('holdOn')
-                }, this.timeoutNum)
-            },
+        clearInterval(this.heart);
+        this.heartStart();
+      },
+      heartStart() {
+        this.heart = setInterval(() => {
+          this.websocketsend('holdOn')
+        }, this.timeoutNum)
+      },
 
-            reconnect() {
-                if(this.lockReconnect) {
-                    return
-                }
-                this.lockReconnect = true
-                this.reInit = setTimeout( () => {     //没连接上会一直重连，设置延迟避免请求过多
-                this.initWebSocket();
-                this.lockReconnect = false
-                }, 4000);
-            },
+      reconnect() {
+        if (this.lockReconnect) {
+          return
+        }
+        this.lockReconnect = true
+        this.reInit = setTimeout(() => { //没连接上会一直重连，设置延迟避免请求过多
+          this.initWebSocket();
+          this.lockReconnect = false
+        }, 4000);
+      },
 
-            initWebSocket(){ //初始化weosocket
-                // console.log("开始重连")
-                let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal)
-                this.websock = new WebSocket(`${this.$wsUrl}/${terminalInfo.tenantId}/${terminalInfo.cinemaUid}/${terminalInfo.passwordMd5}`);
-                this.websock.onopen = this.websocketonopen;
-                this.websock.onmessage = this.websocketonmessage;
-                this.websock.onerror = this.websocketonerror;
-                this.websock.onclose = this.websocketclose;
-            },
-            websocketonopen(e){ //连接建立之后执行send方法发送数据
-                // console.log('setUpWS', e)
-                this.heartReset()
-            },
-            websocketonerror(e){//连接建立失败重连
-                // console.log('connectErr', e)
-                this.reconnect()
-                
-            },
-            websocketonmessage(e){
-                // console.log('receiveMessage', e)
-                // console.log(this.$route)
-                // if(this.$route.name != 'toHome') return
-                if(e.data != '连接成功' && e.data != 'holdOn') {
-                  let data = (JSON.parse(e.data))
-                     if(data.type == 1){
-                      console.log(1)
-                      this.getList()
-                    }
-                    
-                }
-                this.heartReset()
-            },  
-            websocketsend(Data){//数据发送
-                // console.log('sendMessage', Data)
-                this.websock.send(Data)
-            },
-            websocketclose(e){  //关闭
-                // console.log('close', e)
-                this.reconnect()
-            },
+      initWebSocket() { //初始化weosocket
+        // console.log("开始重连")
+        let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal)
+        this.websock = new WebSocket(
+          `${this.$wsUrl}/${terminalInfo.tenantId}/${terminalInfo.cinemaUid}/${terminalInfo.passwordMd5}`);
+        this.websock.onopen = this.websocketonopen;
+        this.websock.onmessage = this.websocketonmessage;
+        this.websock.onerror = this.websocketonerror;
+        this.websock.onclose = this.websocketclose;
+      },
+      websocketonopen(e) { //连接建立之后执行send方法发送数据
+        // console.log('setUpWS', e)
+        this.heartReset()
+      },
+      websocketonerror(e) { //连接建立失败重连
+        // console.log('connectErr', e)
+        this.reconnect()
 
-            //切换页面干掉webSocket
-            killWebSocket() {
-                clearInterval(this.heart);
-                this.lockReconnect = true;
-                clearInterval(this.reInit);
-                this.websock.onclose = null;
-                this.websock.onerror = null;
-                this.websock = null;
-            },
+      },
+      websocketonmessage(e) {
+        // console.log('receiveMessage', e)
+        // console.log(this.$route)
+        // if(this.$route.name != 'toHome') return
+        if (e.data != '连接成功' && e.data != 'holdOn') {
+          let data = (JSON.parse(e.data))
+          if (data.type == 1) {
+            console.log(1)
+            this.getList()
+          }
+
+        }
+        this.heartReset()
+      },
+      websocketsend(Data) { //数据发送
+        // console.log('sendMessage', Data)
+        this.websock.send(Data)
+      },
+      websocketclose(e) { //关闭
+        // console.log('close', e)
+        this.reconnect()
+      },
+
+      //切换页面干掉webSocket
+      killWebSocket() {
+        clearInterval(this.heart);
+        this.lockReconnect = true;
+        clearInterval(this.reInit);
+        this.websock.onclose = null;
+        this.websock.onerror = null;
+        this.websock = null;
+      },
     },
     mounted() {
       // this.timer = setInterval(() => {
@@ -189,7 +184,7 @@
       // }
       this.initWebSocket()
       this.getList()
-      
+
       // this.translateRow()
     },
     beforeDestroy() {

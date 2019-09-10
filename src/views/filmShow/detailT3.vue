@@ -1,5 +1,5 @@
 <template>
-  <div class="bg_contain">
+  <div class="bg_contain" :key="rederKey">
     <header>
       <div class="right-header">
         <p class="code_word">
@@ -18,12 +18,13 @@
               <li v-for="(i,j) in item.timeList" :key="j">
                 <p class="movie-time">{{i.showTimeStart.substring(10,16)}}</p>
                 <p class="movie-price">
-                    <span class="vip_price"
-                      v-show="infoShow.memberTicket && i.ticketList[1]">¥{{i.ticketList[1] && i.ticketList[1].totalPrice}}</span>
-                    <span class="normal_price" v-show="infoShow.memberTicket && infoShow.nonMemberTicket && i.ticketList[1] && i.ticketList[0]">/</span>
-                    <span class="normal_price"
-                      v-show="i.ticketList[0] && infoShow.nonMemberTicket">¥{{i.ticketList[0] && i.ticketList[0].totalPrice}}</span>
-                  </p>
+                  <span class="vip_price"
+                    v-show="infoShow.memberTicket && i.ticketList[1]">¥{{i.ticketList[1] && i.ticketList[1].totalPrice}}</span>
+                  <span class="normal_price"
+                    v-show="infoShow.memberTicket && infoShow.nonMemberTicket && i.ticketList[1] && i.ticketList[0]">/</span>
+                  <span class="normal_price"
+                    v-show="i.ticketList[0] && infoShow.nonMemberTicket">¥{{i.ticketList[0] && i.ticketList[0].totalPrice}}</span>
+                </p>
               </li>
             </ul>
           </div>
@@ -78,6 +79,8 @@
         },
         swiperOption: {
           slidesPerView: 'auto',
+          observer: true, //修改swiper自己或子元素时，自动初始化swiper 
+          observeParents: true, //修改swiper的父元素时，自动初始化swiper 
           autoplay: {
             delay: 10000,
             disableOnInteraction: false
@@ -86,7 +89,6 @@
           // spaceBetween: 40,
           on: {
             slideChange: function () {
-
               console.log('slideChange', this.previousIndex, '->', this.activeIndex)
             },
           }
@@ -99,9 +101,10 @@
         pageNum: 1,
         pageSize: 2,
         swiperNum: "",
-        websock:null,
+        websock: null,
         timeoutNum: 30000,
-        heart:null,
+        heart: null,
+        rederKey:0
       }
     },
     methods: {
@@ -122,14 +125,39 @@
           console.log(res)
           if (res.code === 200 && res.data) {
             this.arrList = [];
-            this.classObject[res.data.template.backgroundColor] = true;
-            // this.arrList = res.data.planMovieListPage.list
             this.swiperNum = Math.ceil(res.data.planMovieListPage.total / this.pageSize)
+            let timeList = [],
+              timediff = 0;
+
             for (let i = 0; i < this.swiperNum; i++) {
               let temp = res.data.planMovieListPage.list.slice(i * 2, i * 2 + 2);
               this.arrList.push(JSON.parse(JSON.stringify(temp)));
               console.log(this.arrList)
             }
+            JSON.parse(JSON.stringify(res.data.planMovieListPage.list)).forEach(item => {
+              console.log(item)
+              let firstTime = new Date(Date.parse(item.timeList[0].showTimeStart.replace('/-/g', '/')))
+              .getTime();
+              timeList.push(firstTime)
+
+            })
+            this.rederKey = Math.random() + new Date().getTime()
+            console.log(timeList)
+            timeList.sort((a, b) => {
+              return a - b
+            })
+            timediff = timeList[0] - res.timestamp;
+            console.log(timediff)
+           timediff =  timediff < 0?50000:timediff
+           
+              let timerout = setTimeout(() => { // 重新获取list
+                this.getList()
+                console.log("重新获取list")
+              }, timediff)
+            
+
+            console.log(timediff)
+            console.log(timeList)
             this.showList = res.data.template.columnList
             this.showList.length && this.showList.forEach(item => {
               console.log(item)
@@ -141,89 +169,90 @@
         })
       },
       heartReset() {
-                clearInterval(this.heart);
-                this.heartStart();
-            },
-            heartStart() {
-                this.heart = setInterval(() => {
-                    this.websocketsend('holdOn')
-                }, this.timeoutNum)
-            },
+        clearInterval(this.heart);
+        this.heartStart();
+      },
+      heartStart() {
+        this.heart = setInterval(() => {
+          this.websocketsend('holdOn')
+        }, this.timeoutNum)
+      },
 
-            reconnect() {
-                if(this.lockReconnect) {
-                    return
-                }
-                this.lockReconnect = true
-                this.reInit = setTimeout( () => {     //没连接上会一直重连，设置延迟避免请求过多
-                this.initWebSocket();
-                this.lockReconnect = false
-                }, 4000);
-            },
+      reconnect() {
+        if (this.lockReconnect) {
+          return
+        }
+        this.lockReconnect = true
+        this.reInit = setTimeout(() => { //没连接上会一直重连，设置延迟避免请求过多
+          this.initWebSocket();
+          this.lockReconnect = false
+        }, 4000);
+      },
 
-            initWebSocket(){ //初始化weosocket
-                // console.log("开始重连")
-                let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal)
-                this.websock = new WebSocket(`${this.$wsUrl}/${terminalInfo.tenantId}/${terminalInfo.cinemaUid}/${terminalInfo.passwordMd5}`);
-                this.websock.onopen = this.websocketonopen;
-                this.websock.onmessage = this.websocketonmessage;
-                this.websock.onerror = this.websocketonerror;
-                this.websock.onclose = this.websocketclose;
-            },
-            websocketonopen(e){ //连接建立之后执行send方法发送数据
-                // console.log('setUpWS', e)
-                this.heartReset()
-            },
-            websocketonerror(e){//连接建立失败重连
-                // console.log('connectErr', e)
-                this.reconnect()
-                
-            },
-            websocketonmessage(e){
-                // console.log('receiveMessage', e)
-                // console.log(this.$route)
-                // if(this.$route.name != 'toHome') return
-                if(e.data != '连接成功' && e.data != 'holdOn') {
-                  let data = (JSON.parse(e.data))
-                     if(data.type == 1){
-                      console.log(1)
-                      this.getList()
-                    }
-                    
-                }
-                this.heartReset()
-            },  
-            websocketsend(Data){//数据发送
-                // console.log('sendMessage', Data)
-                this.websock.send(Data)
-            },
-            websocketclose(e){  //关闭
-                // console.log('close', e)
-                this.reconnect()
-            },
+      initWebSocket() { //初始化weosocket
+        // console.log("开始重连")
+        let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal)
+        this.websock = new WebSocket(
+          `${this.$wsUrl}/${terminalInfo.tenantId}/${terminalInfo.cinemaUid}/${terminalInfo.passwordMd5}`);
+        this.websock.onopen = this.websocketonopen;
+        this.websock.onmessage = this.websocketonmessage;
+        this.websock.onerror = this.websocketonerror;
+        this.websock.onclose = this.websocketclose;
+      },
+      websocketonopen(e) { //连接建立之后执行send方法发送数据
+        // console.log('setUpWS', e)
+        this.heartReset()
+      },
+      websocketonerror(e) { //连接建立失败重连
+        // console.log('connectErr', e)
+        this.reconnect()
 
-            //切换页面干掉webSocket
-            killWebSocket() {
-                clearInterval(this.heart);
-                this.lockReconnect = true;
-                clearInterval(this.reInit);
-                this.websock.onclose = null;
-                this.websock.onerror = null;
-                this.websock = null;
-            },
+      },
+      websocketonmessage(e) {
+        // console.log('receiveMessage', e)
+        // console.log(this.$route)
+        // if(this.$route.name != 'toHome') return
+        if (e.data != '连接成功' && e.data != 'holdOn') {
+          let data = (JSON.parse(e.data))
+          if (data.type == 1) {
+            console.log(1)
+            this.getList()
+          }
+
+        }
+        this.heartReset()
+      },
+      websocketsend(Data) { //数据发送
+        // console.log('sendMessage', Data)
+        this.websock.send(Data)
+      },
+      websocketclose(e) { //关闭
+        // console.log('close', e)
+        this.reconnect()
+      },
+
+      //切换页面干掉webSocket
+      killWebSocket() {
+        clearInterval(this.heart);
+        this.lockReconnect = true;
+        clearInterval(this.reInit);
+        this.websock.onclose = null;
+        this.websock.onerror = null;
+        this.websock = null;
+      },
     },
     mounted() {
-      // this.timer = setInterval(() => {
-      //   this.getList()
-      // }, 10000)
+      this.timer = setInterval(() => {
+        this.dateTime = new Date().toLocaleString()
+      }, 1000)
       this.getList()
       this.initWebSocket()
       // this.translateRow()
     },
     beforeDestroy() {
-      // if (this.timer) {
-      //   clearInterval(this.timer); // 在Vue实例销毁前，清除我们的定时器
-      // }
+      if (this.timer) {
+        clearInterval(this.timer); // 在Vue实例销毁前，清除我们的定时器
+      }
       this.killWebSocket()
     }
   }
@@ -252,8 +281,8 @@
   .bg_contain {
     background-image: linear-gradient(-135deg, #131720 0%, #1E2643 100%);
 
-  // height: 100vh;
-  // overflow: hidden;
+    // height: 100vh;
+    // overflow: hidden;
     min-height: 100vh;
 
     // padding-left: 120px;
@@ -359,8 +388,7 @@
 
             .normal_price {
               font-family: DINAlternate-Bold;
-              font-size: .9rem
-              ;
+              font-size: .9rem;
               color: #6F80B0;
               letter-spacing: 0;
             }

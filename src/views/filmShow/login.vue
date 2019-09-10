@@ -15,6 +15,7 @@
 
       </p>
       <div class="btn-area">
+        <!-- <router-link to='swiperList' replace tag="button"  exact>注册</router-link> -->
         <button class="btn_login" @click="filmLogin">注册</button>
       </div>
     </div>
@@ -41,15 +42,14 @@ import md5 from 'js-md5'
         this.$ctmList.filmLogin(httpObj).then(res => {
           if (res.code === 200 && res.data) {
             this.$message({
-              message: '恭喜你，注册成功',
+              message: '恭喜你，注册成功',  // 弹出成功信息
             });
-            // this.$store.commit("ctmRemberTerminal",res.data);
-            res.data.passwordMd5 = md5(res.data.password)
+            res.data.passwordMd5 = md5(res.data.password) // md5加密
             console.log(res.data)
-            localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
-            this.$router.push('swiperList')
+            window.localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))  // 记住登陆信息
+            this.$router.push('swiperList')  // 跳转到list 页
           } else {
-            localStorage.removeItem("ctmRemberTerminal")
+            localStorage.removeItem("ctmRemberTerminal")  // 清楚登陆信息
             this.error(res.data);
           }
         })
