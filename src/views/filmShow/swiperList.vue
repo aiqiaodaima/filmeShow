@@ -127,7 +127,7 @@
       //   }
       //   this.getList()
       // }
-      this.getList()
+      // this.getList()
       // if(this.$route.query.template){
       //   this.goAddress(this.$route.query.template)
       // }
