@@ -15,6 +15,7 @@
 
       </p>
       <div class="btn-area">
+        <!-- <router-link to='swiperList' replace tag="button"  exact>注册</router-link> -->
         <button class="btn_login" @click="filmLogin">注册</button>
       </div>
     </div>
@@ -24,8 +25,11 @@
   </div>
 </template>
 <script>
+let domain = document.domain,
+protocol = window.location.protocol;
+console.log(`${protocol}//${domain}`)
 import md5 from 'js-md5'
-
+// import config from ''
   export default {
     data() {
       return {
@@ -41,21 +45,29 @@ import md5 from 'js-md5'
         this.$ctmList.filmLogin(httpObj).then(res => {
           if (res.code === 200 && res.data) {
             this.$message({
-              message: '恭喜你，注册成功',
+              message: '恭喜你，注册成功',  // 弹出成功信息
             });
-            // this.$store.commit("ctmRemberTerminal",res.data);
-            res.data.passwordMd5 = md5(res.data.password)
-            console.log(res.data)
-            localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))
-            this.$router.push('swiperList')
+            res.data.passwordMd5 = md5(res.data.password) // md5加密
+            // console.log(res.data)
+            window.localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))  // 记住登陆信息
+            this.$router.push('/swiperList')  // 跳转到list 页
+            // window.location.href = protocol+ "//" + domain + "/swiperList"
           } else {
-            localStorage.removeItem("ctmRemberTerminal")
+            localStorage.removeItem("ctmRemberTerminal")  // 清楚登陆信息
             this.error(res.data);
           }
         })
       }
     },
     created() {
+      // console.log(window.location.search.substr(1).split("&"))
+      // let searchArr = window.location.search.substr(1).split("&")
+      // let routeQuery = {}
+      // searchArr.forEach(item => {
+      //   if(item.split('=')[0] && item.split('=')[1]) routeQuery[item.split('=')[0]] = item.split('=')[1]
+      //   console.log(routeQuery)
+      // });
+      // console.log(routeQuery)
       let routeQuery = this.$route.query;
       if(routeQuery.logout == 1) return localStorage.removeItem('ctmRemberTerminal')
       if (localStorage.ctmRemberTerminal) {
@@ -64,12 +76,16 @@ import md5 from 'js-md5'
           return this.licenseKey = routeQuery.license
         }
         if (routeQuery.template){
+          routeQuery.template = routeQuery.template.replace(/T|t/g,"")
+          // console.log(routeQuery.template)
           this.$router.push({
-            path: `detailT${routeQuery.template}?templateCode=T${routeQuery.template}`
+            path: `detailT${routeQuery.template}?template=T${routeQuery.template}`
           })
+          //  window.location.href = protocol+ "//" + domain + "/detail" + routeQuery.template
         } else {
+          // window.location.href = protocol+ "//" + domain + "/swiperList"
           this.$router.replace({
-            path: `swiperList`
+            path: `/swiperList`
           })
         }
       }

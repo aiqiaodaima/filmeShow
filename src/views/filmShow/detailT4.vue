@@ -14,7 +14,23 @@
         <el-col :span="3">会员价</el-col>
         <el-col :span="4">可售座位</el-col>
       </el-row>
-      <swiper :options="swiperOption" v-if="arrList.length">
+       <div class="swiper-container swiper-container-h" v-if="arrList.length">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" v-for="a in swiperNum" :key="a">
+            <el-row class="table_body" v-for="(item,index) in arrList[a-1]" :key="index">
+            <el-col :span="4">{{item.movieName}}</el-col>
+            <el-col :span="3">{{item.movieLanguage}}</el-col>
+            <el-col :span="3">{{item.hallName}}</el-col>
+            <el-col :span="4">{{item.showTimeStart.substring(10,16)}}</el-col>
+            <el-col :span="3">{{item.ticketList[0] && item.ticketList[0].totalPrice || "无"}}</el-col>
+            <el-col :span="3">{{item.ticketList[1] && item.ticketList[1].totalPrice || "无"}}</el-col>
+            <el-col :span="4">{{item.seatNum}}</el-col>
+          </el-row>
+          </div>      
+        </div>
+       
+      </div>
+      <!-- <swiper :options="swiperOption" v-if="arrList.length">
         <swiper-slide v-for="a in swiperNum" :key="a">
           <el-row class="table_body" v-for="(item,index) in arrList[a-1]" :key="index">
             <el-col :span="4">{{item.movieName}}</el-col>
@@ -26,20 +42,20 @@
             <el-col :span="4">{{item.seatNum}}</el-col>
           </el-row>
         </swiper-slide>
-      </swiper>
+      </swiper> -->
     </div>
   </div>
 </template>
 <script>
-  import {
-    swiper,
-    swiperSlide
-  } from 'vue-awesome-swiper'
+  // import {
+  //   swiper,
+  //   swiperSlide
+  // } from 'vue-awesome-swiper'
   export default {
-    components: {
-      swiper,
-      swiperSlide
-    },
+    // components: {
+    //   swiper,
+    //   swiperSlide
+    // },
     data() {
       return {
         swiperOption: {
@@ -48,12 +64,6 @@
             delay: 5000,
             disableOnInteraction: false
           },
-          // direction : 'vertical',
-          // spaceBetween: 40,
-          // pagination: {
-          //   el: '.swiper-pagination',
-          //   clickable: true
-          // }
         },
         arrList: [],
         status: 1,
@@ -62,9 +72,9 @@
         pageNum: 1,
         pageSize: 3,
         swiperNum: "",
-        websock:null,
+        websock: null,
         timeoutNum: 30000,
-        heart:null,
+        heart: null,
       }
     },
     methods: {
@@ -101,82 +111,99 @@
               let temp = tempArr.slice(i * this.pageSize, i * this.pageSize + this.pageSize);
               this.arrList.push(JSON.parse(JSON.stringify(temp)));
             }
+            this.$nextTick(() => {
+              this.initSwiper()
+            })
           } else {
             this.error(res.msg)
           }
         })
       },
       heartReset() {
-                clearInterval(this.heart);
-                this.heartStart();
-            },
-            heartStart() {
-                this.heart = setInterval(() => {
-                    this.websocketsend('holdOn')
-                }, this.timeoutNum)
-            },
+        clearInterval(this.heart);
+        this.heartStart();
+      },
+      heartStart() {
+        this.heart = setInterval(() => {
+          this.websocketsend('holdOn')
+        }, this.timeoutNum)
+      },
+       initSwiper() {
+        var swiperH = new Swiper('.swiper-container-h', {
+          slidesPerView: 'auto',
+          spaceBetween: 0,
+          // slidesPerView: 3,
+          autoplay: {
+            delay: 5000,
+            disableOnInteraction: true,
+          },
+          observer: true, //修改swiper自己或子元素时，自动初始化swiper    
+          observeParents: true, //修改swiper的父元素时，自动初始化swiper
+          loop: true,
+        })
+      },
+      reconnect() {
+        if (this.lockReconnect) {
+          return
+        }
+        this.lockReconnect = true
+        this.reInit = setTimeout(() => { //没连接上会一直重连，设置延迟避免请求过多
+          this.initWebSocket();
+          this.lockReconnect = false
+        }, 4000);
+      },
 
-            reconnect() {
-                if(this.lockReconnect) {
-                    return
-                }
-                this.lockReconnect = true
-                this.reInit = setTimeout( () => {     //没连接上会一直重连，设置延迟避免请求过多
-                this.initWebSocket();
-                this.lockReconnect = false
-                }, 4000);
-            },
+      initWebSocket() { //初始化weosocket
+        // console.log("开始重连")
+        let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal)
+        this.websock = new WebSocket(
+          `${this.$wsUrl}/${terminalInfo.tenantId}/${terminalInfo.cinemaUid}/${terminalInfo.passwordMd5}`);
+        this.websock.onopen = this.websocketonopen;
+        this.websock.onmessage = this.websocketonmessage;
+        this.websock.onerror = this.websocketonerror;
+        this.websock.onclose = this.websocketclose;
+      },
+      websocketonopen(e) { //连接建立之后执行send方法发送数据
+        // console.log('setUpWS', e)
+        this.heartReset()
+      },
+      websocketonerror(e) { //连接建立失败重连
+        // console.log('connectErr', e)
+        this.reconnect()
 
-            initWebSocket(){ //初始化weosocket
-                // console.log("开始重连")
-                let terminalInfo = JSON.parse(localStorage.ctmRemberTerminal)
-                this.websock = new WebSocket(`${this.$wsUrl}/${terminalInfo.tenantId}/${terminalInfo.cinemaUid}/${terminalInfo.passwordMd5}`);
-                this.websock.onopen = this.websocketonopen;
-                this.websock.onmessage = this.websocketonmessage;
-                this.websock.onerror = this.websocketonerror;
-                this.websock.onclose = this.websocketclose;
-            },
-            websocketonopen(e){ //连接建立之后执行send方法发送数据
-                // console.log('setUpWS', e)
-                this.heartReset()
-            },
-            websocketonerror(e){//连接建立失败重连
-                // console.log('connectErr', e)
-                this.reconnect()
-                
-            },
-            websocketonmessage(e){
-                // console.log('receiveMessage', e)
-                // console.log(this.$route)
-                // if(this.$route.name != 'toHome') return
-                if(e.data != '连接成功' && e.data != 'holdOn') {
-                  let data = (JSON.parse(e.data))
-                     if(data.type == 1){
-                      console.log(1)
-                      this.getList()
-                    }
-                    
-                }
-                this.heartReset()
-            },  
-            websocketsend(Data){//数据发送
-                // console.log('sendMessage', Data)
-                this.websock.send(Data)
-            },
-            websocketclose(e){  //关闭
-                // console.log('close', e)
-                this.reconnect()
-            },
+      },
+      websocketonmessage(e) {
+        // console.log('receiveMessage', e)
+        // console.log(this.$route)
+        // if(this.$route.name != 'toHome') return
+        if (e.data != '连接成功' && e.data != 'holdOn') {
+          let data = (JSON.parse(e.data))
+          if (data.type == 1) {
+            console.log(1)
+            this.getList()
+          }
 
-            //切换页面干掉webSocket
-            killWebSocket() {
-                clearInterval(this.heart);
-                this.lockReconnect = true;
-                clearInterval(this.reInit);
-                this.websock.onclose = null;
-                this.websock.onerror = null;
-                this.websock = null;
-            },
+        }
+        this.heartReset()
+      },
+      websocketsend(Data) { //数据发送
+        // console.log('sendMessage', Data)
+        this.websock.send(Data)
+      },
+      websocketclose(e) { //关闭
+        // console.log('close', e)
+        this.reconnect()
+      },
+
+      //切换页面干掉webSocket
+      killWebSocket() {
+        clearInterval(this.heart);
+        this.lockReconnect = true;
+        clearInterval(this.reInit);
+        this.websock.onclose = null;
+        this.websock.onerror = null;
+        this.websock = null;
+      },
     },
     mounted() {
       // this.timer = setInterval(() => {
@@ -189,7 +216,9 @@
       // }
       this.initWebSocket()
       this.getList()
-      
+      this.$nextTick(() => {
+        this.initSwiper()
+      })
       // this.translateRow()
     },
     beforeDestroy() {

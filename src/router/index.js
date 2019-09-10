@@ -60,6 +60,13 @@ let routes = [
     },
     component: (resolve) => require(['views/filmShow/detailT6.vue'], resolve),
     name: '慧影云排期展示页'
+  },{
+    path: '/test',
+    meta: {
+      title: '慧影云排期展示页'
+    },
+    component: (resolve) => require(['views/filmShow/test.vue'], resolve),
+    name: '慧影云排期展示页'
   }
 ];
 
