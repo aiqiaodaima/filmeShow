@@ -76,10 +76,12 @@ import md5 from 'js-md5'
           return this.licenseKey = routeQuery.license
         }
         if (routeQuery.template){
-          //  window.location.href = protocol+ "//" + domain + "/detail" + routeQuery.template
+          routeQuery.template = routeQuery.template.replace(/T|t/g,"")
+          // console.log(routeQuery.template)
           this.$router.push({
-            path: `/detailT${routeQuery.template}?template=T${routeQuery.template}`
+            path: `detailT${routeQuery.template}?template=T${routeQuery.template}`
           })
+          //  window.location.href = protocol+ "//" + domain + "/detail" + routeQuery.template
         } else {
           // window.location.href = protocol+ "//" + domain + "/swiperList"
           this.$router.replace({
