@@ -78,12 +78,12 @@ import md5 from 'js-md5'
         if (routeQuery.template){
           //  window.location.href = protocol+ "//" + domain + "/detail" + routeQuery.template
           this.$router.push({
-            path: `detailT${routeQuery.template}?template=T${routeQuery.template}`
+            path: `/detail${routeQuery.template}?template=${routeQuery.template}`
           })
         } else {
           // window.location.href = protocol+ "//" + domain + "/swiperList"
           this.$router.replace({
-            path: `swiperList`
+            path: `/swiperList`
           })
         }
       }

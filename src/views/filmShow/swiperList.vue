@@ -118,13 +118,13 @@ protocol = window.location.protocol;
         })
       },
       goAddress(tCode) {
-        window.location.href = protocol+ "//" + domain + "/detail" + tCode + "?template=" + tCode
-        // this.$router.push({
-        //   path: `detail${tCode}`,
-        //   query: {
-        //     templateCode: tCode
-        //   }
-        // })
+        // window.location.href = protocol+ "//" + domain + "/detail" + tCode + "?template=" + tCode
+        this.$router.push({
+          path: `/detail${tCode}`,
+          query: {
+            templateCode: tCode
+          }
+        })
       },
       initSwiper(){
          var swiperH = new Swiper('.swiper-container-h', {
