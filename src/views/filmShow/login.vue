@@ -25,6 +25,9 @@
   </div>
 </template>
 <script>
+let domain = document.domain,
+protocol = window.location.protocol;
+console.log(`${protocol}//${domain}`)
 import md5 from 'js-md5'
 // import config from ''
   export default {
@@ -48,7 +51,7 @@ import md5 from 'js-md5'
             // console.log(res.data)
             window.localStorage.setItem("ctmRemberTerminal", JSON.stringify(res.data))  // 记住登陆信息
             //this.$router.push('swiperList')  // 跳转到list 页
-            window.location.href = "/swiperList"
+            window.location.href = protocol+ "//" + domain + "/swiperList"
           } else {
             localStorage.removeItem("ctmRemberTerminal")  // 清楚登陆信息
             this.error(res.data);
