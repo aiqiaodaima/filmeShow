@@ -14,7 +14,23 @@
         <el-col :span="3">会员价</el-col>
         <el-col :span="4">可售座位</el-col>
       </el-row>
-      <swiper :options="swiperOption" v-if="arrList.length">
+       <div class="swiper-container swiper-container-h" v-if="arrList.length">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" v-for="a in swiperNum" :key="a">
+            <el-row class="table_body" v-for="(item,index) in arrList[a-1]" :key="index">
+            <el-col :span="4">{{item.movieName}}</el-col>
+            <el-col :span="3">{{item.movieLanguage}}</el-col>
+            <el-col :span="3">{{item.hallName}}</el-col>
+            <el-col :span="4">{{item.showTimeStart.substring(10,16)}}</el-col>
+            <el-col :span="3">{{item.ticketList[0] && item.ticketList[0].totalPrice || "无"}}</el-col>
+            <el-col :span="3">{{item.ticketList[1] && item.ticketList[1].totalPrice || "无"}}</el-col>
+            <el-col :span="4">{{item.seatNum}}</el-col>
+          </el-row>
+          </div>      
+        </div>
+       
+      </div>
+      <!-- <swiper :options="swiperOption" v-if="arrList.length">
         <swiper-slide v-for="a in swiperNum" :key="a">
           <el-row class="table_body" v-for="(item,index) in arrList[a-1]" :key="index">
             <el-col :span="4">{{item.movieName}}</el-col>
@@ -26,7 +42,7 @@
             <el-col :span="4">{{item.seatNum}}</el-col>
           </el-row>
         </swiper-slide>
-      </swiper>
+      </swiper> -->
     </div>
   </div>
 </template>
@@ -95,6 +111,9 @@
               let temp = tempArr.slice(i * this.pageSize, i * this.pageSize + this.pageSize);
               this.arrList.push(JSON.parse(JSON.stringify(temp)));
             }
+            this.$nextTick(() => {
+              this.initSwiper()
+            })
           } else {
             this.error(res.msg)
           }
@@ -109,7 +128,20 @@
           this.websocketsend('holdOn')
         }, this.timeoutNum)
       },
-
+       initSwiper() {
+        var swiperH = new Swiper('.swiper-container-h', {
+          slidesPerView: 'auto',
+          spaceBetween: 0,
+          // slidesPerView: 3,
+          autoplay: {
+            delay: 5000,
+            disableOnInteraction: true,
+          },
+          observer: true, //修改swiper自己或子元素时，自动初始化swiper    
+          observeParents: true, //修改swiper的父元素时，自动初始化swiper
+          loop: true,
+        })
+      },
       reconnect() {
         if (this.lockReconnect) {
           return
@@ -184,7 +216,9 @@
       // }
       this.initWebSocket()
       this.getList()
-
+      this.$nextTick(() => {
+        this.initSwiper()
+      })
       // this.translateRow()
     },
     beforeDestroy() {

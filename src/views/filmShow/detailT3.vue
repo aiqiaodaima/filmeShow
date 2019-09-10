@@ -7,8 +7,34 @@
         </p>
       </div>
     </header>
+
     <div class="content-show">
-      <swiper :options="swiperOption" ref="swiper" v-if="swiperNum">
+      <div class="swiper-container swiper-container-h" v-if="arrList.length">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" v-for="a in swiperNum" :key="a">
+            <div class="item-div" v-for="(item,index) in arrList[a-1]" :key="index">
+              <p class="p-title">{{item.movieName}} <span>{{item.movieLanguage}}/{{item.disVersion}}</span>
+                <span class="span-time">{{item.timeLong}}分钟</span>
+              </p>
+              <ul class="ul-playTime">
+                <li v-for="(i,j) in item.timeList" :key="j">
+                  <p class="movie-time">{{i.showTimeStart.substring(10,16)}}</p>
+                  <p class="movie-price">
+                    <span class="vip_price"
+                      v-show="infoShow.memberTicket && i.ticketList[1]">¥{{i.ticketList[1] && i.ticketList[1].totalPrice}}</span>
+                    <span class="normal_price"
+                      v-show="infoShow.memberTicket && infoShow.nonMemberTicket && i.ticketList[1] && i.ticketList[0]">/</span>
+                    <span class="normal_price"
+                      v-show="i.ticketList[0] && infoShow.nonMemberTicket">¥{{i.ticketList[0] && i.ticketList[0].totalPrice}}</span>
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- <swiper :options="swiperOption" ref="swiper" v-if="swiperNum">
         <swiper-slide v-for="a in swiperNum" :key="a">
           <div class="item-div" v-for="(item,index) in arrList[a-1]" :key="index">
             <p class="p-title">{{item.movieName}} <span>{{item.movieLanguage}}/{{item.disVersion}}</span>
@@ -29,7 +55,7 @@
             </ul>
           </div>
         </swiper-slide>
-      </swiper>
+      </swiper> -->
     </div>
   </div>
 </template>
@@ -104,7 +130,7 @@
         websock: null,
         timeoutNum: 30000,
         heart: null,
-        rederKey:0
+        rederKey: 0
       }
     },
     methods: {
@@ -134,10 +160,13 @@
               this.arrList.push(JSON.parse(JSON.stringify(temp)));
               console.log(this.arrList)
             }
+             this.$nextTick(() => {
+              this.initSwiper()
+            })
             JSON.parse(JSON.stringify(res.data.planMovieListPage.list)).forEach(item => {
               console.log(item)
               let firstTime = new Date(Date.parse(item.timeList[0].showTimeStart.replace('/-/g', '/')))
-              .getTime();
+                .getTime();
               timeList.push(firstTime)
 
             })
@@ -148,13 +177,13 @@
             })
             timediff = timeList[0] - res.timestamp;
             console.log(timediff)
-           timediff =  timediff < 0?50000:timediff
-           
-              let timerout = setTimeout(() => { // 重新获取list
-                this.getList()
-                console.log("重新获取list")
-              }, timediff)
-            
+            timediff = timediff < 0 ? 50000 : timediff
+
+            let timerout = setTimeout(() => { // 重新获取list
+              this.getList()
+              console.log("重新获取list")
+            }, timediff)
+
 
             console.log(timediff)
             console.log(timeList)
@@ -240,6 +269,20 @@
         this.websock.onerror = null;
         this.websock = null;
       },
+      initSwiper() {
+        var swiperH = new Swiper('.swiper-container-h', {
+          slidesPerView: 'auto',
+          spaceBetween: 0,
+          // slidesPerView: 3,
+          autoplay: {
+            delay: 10000,
+            disableOnInteraction: true,
+          },
+          observer: true, //修改swiper自己或子元素时，自动初始化swiper    
+          observeParents: true, //修改swiper的父元素时，自动初始化swiper
+          loop: true,
+        })
+      }
     },
     mounted() {
       this.timer = setInterval(() => {
@@ -247,6 +290,10 @@
       }, 1000)
       this.getList()
       this.initWebSocket()
+      this.$nextTick(() => {
+        this.initSwiper()
+      })
+      // this.initSwiper()
       // this.translateRow()
     },
     beforeDestroy() {

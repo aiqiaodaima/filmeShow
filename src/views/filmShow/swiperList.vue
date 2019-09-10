@@ -30,7 +30,7 @@
               <img :src="item.thumbnail" alt="">
             </div>
             <p class="tip-p">{{item.name}}</p>
-          </div> 
+          </div>      
         </div>
         <div class="swiper-pagination"></div>
       </div>
@@ -38,6 +38,8 @@
   </div>
 </template>
 <script>
+let domain = document.domain,
+protocol = window.location.protocol;
   // import {
   //   swiper,
   //   swiperSlide
@@ -116,12 +118,13 @@
         })
       },
       goAddress(tCode) {
-        this.$router.push({
-          path: `detail${tCode}`,
-          query: {
-            templateCode: tCode
-          }
-        })
+        window.location.href = protocol+ "//" + domain + "/detail" + tCode + "?template=" + tCode
+        // this.$router.push({
+        //   path: `detail${tCode}`,
+        //   query: {
+        //     templateCode: tCode
+        //   }
+        // })
       },
       initSwiper(){
          var swiperH = new Swiper('.swiper-container-h', {
@@ -138,6 +141,7 @@
           clickable: true
         },
         loop: true,
+        autoHeight:false,
       });
       }
     },
@@ -254,9 +258,13 @@
       color: #FFFFFF;
       letter-spacing: 0;
     }
-
+    .swiper-container{
+      overflow-y: visible;
+      height: 24rem;
+    }
     .swiper-pagination {
-      position: relative;
+      // bottom: -3rem;
+      // position: relative;
       text-align: left;
       margin-top: 3.5rem;
     }

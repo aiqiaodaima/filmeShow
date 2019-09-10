@@ -60,6 +60,12 @@ import md5 from 'js-md5'
       }
     },
     created() {
+      // console.log(window.location.search.substr(1).split("&"))
+      // let searchArr = window.location.search.substr(1).split("&")
+      // searchArr.forEach(item => {
+        
+      // });
+      // console.log(searchArr)
       let routeQuery = this.$route.query;
       if(routeQuery.logout == 1) return localStorage.removeItem('ctmRemberTerminal')
       if (localStorage.ctmRemberTerminal) {
@@ -68,6 +74,7 @@ import md5 from 'js-md5'
           return this.licenseKey = routeQuery.license
         }
         if (routeQuery.template){
+          //  window.location.href = protocol+ "//" + domain + "/detail"
           this.$router.push({
             path: `detailT${routeQuery.template}?templateCode=T${routeQuery.template}`
           })
