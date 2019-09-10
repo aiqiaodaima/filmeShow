@@ -9,6 +9,11 @@ import NProgress from 'nprogress';
 import axios from 'axios';
 import md5 from 'js-md5'
 import 'nprogress/nprogress.css';
+
+import 'babel-polyfill'
+import Es6Promise from 'es6-promise'
+require('es6-promise').polyfill()
+Es6Promise.polyfill()
 // import 'lib-flexible'
 import {
     MessageBox,
@@ -25,7 +30,7 @@ if(location.host.indexOf('test')>-1) wsUrlHost = 'testpos';
 if(location.host.indexOf('pre')>-1) wsUrlHost = 'prepos';
 let urlArr = location.host.split('.')
 
-Vue.prototype.$wsUrl = process.env.NODE_ENV == 'production' ? `wss://api${wsUrlHost}${urlArr[1]}${urlArr[2]}/websocket/server/` : 'wss://apitestpos.oristarcloud.com/websocket/server/'
+Vue.prototype.$wsUrl = process.env.NODE_ENV == 'production' ? `wss://api${wsUrlHost}.${urlArr[1]}.${urlArr[2]}/websocket/server/` : 'wss://apitestpos.oristarcloud.com/websocket/server/'
 // Vue.use(ElementUI)
 const router = new VueRouter({
     mode: 'history',
@@ -83,7 +88,7 @@ router.beforeEach((to, from, next) => {
         //     path: '/detailT3'
         // })
     } else {
-        if (to.query.license) {
+        if (to.query.license) {  // 如果url 带license 执行的方法
             console.log(to.query.license)
             let httpObj = {
                 licenseKey: to.query.license,
@@ -110,43 +115,6 @@ router.beforeEach((to, from, next) => {
             next();
         }
     }
-
-    // if(to.path.indexOf("/cms-mvs/page/") != -1 ){
-    //     console.log('进来了--/cms-mvs/page')
-    //     next({ path: '/login' })
-    // }else{
-    //     next();
-    // }
-    // if (to.path == '/login') {
-    //     let loginInfor = localStorage.getItem('userLocation');
-    //     localStorage.clear();
-    //     localStorage.setItem('userLocation', loginInfor);
-    //     store.commit('updateLoginToken', null);
-    //     store.commit('updateLoginUser', null);
-    //     store.commit('updateUserMenu', null);
-    //     localStorage.removeItem('navTabData');
-    //     store.commit('updateNavTabDataByIndex', [{
-    //         name: '首页',
-    //         url: '/home',
-    //         active: true,
-    //     }])
-    // 	next();
-    // } else {		
-    // 	if (!store.state.loginToken) {
-    // 		if (token) {
-    //             store.commit('updateLoginToken', token);
-    //             store.commit('updateLoginUser', JSON.parse(localStorage.getItem('user')));
-    //             store.commit('updateUserMenu', JSON.parse(localStorage.getItem('userMenu')));
-    //             setGlobalTopNavs(to , next);
-    // 		} else {
-    // 			next({ path: '/login' });
-    // 		}
-    // 	} else {
-    //         // next();
-    //         setGlobalTopNavs(to, next);
-    // 	}
-    // }
-    // next();
 });
 router.afterEach((transition) => {
 });

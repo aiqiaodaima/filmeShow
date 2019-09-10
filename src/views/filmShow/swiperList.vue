@@ -13,7 +13,7 @@
       </div>
     </header>
     <div class="content-show">
-      <swiper :options="swiperOption">
+      <!-- <swiper :options="swiperOption">
         <swiper-slide v-for="(item,index) in arrList" :key="index">
           <div class="single-carousel" @click="goAddress(item.tCode)">
             <img :src="item.thumbnail" alt="">
@@ -22,21 +22,34 @@
           <p class="tip-p">{{item.name}}</p>
         </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
-      </swiper>
+      </swiper> -->
+      <div class="swiper-container swiper-container-h" v-if="arrList.length">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" v-for="(item,index) in arrList" :key="index">
+            <div class="single-carousel" @click="goAddress(item.tCode)">
+              <img :src="item.thumbnail" alt="">
+            </div>
+            <p class="tip-p">{{item.name}}</p>
+          </div>      
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
     </div>
   </div>
 </template>
 <script>
-  import {
-    swiper,
-    swiperSlide
-  } from 'vue-awesome-swiper'
+let domain = document.domain,
+protocol = window.location.protocol;
+  // import {
+  //   swiper,
+  //   swiperSlide
+  // } from 'vue-awesome-swiper'
   import md5 from 'js-md5'
   export default {
-    components: {
-      swiper,
-      swiperSlide
-    },
+    // components: {
+    //   swiper,
+    //   swiperSlide
+    // },
     data() {
       return {
         // licenseKey:this.$route.query.license || "",
@@ -77,9 +90,12 @@
             this.arrList.length && this.arrList.forEach(item => {
               item.addressUrl = res.data.videoShowPlanUrl + item.url
             })
+            this.$nextTick(()=>{
+              this.initSwiper()
+            })
           } else {
             this.error(res.msg)
-            this.status =  "暂停"
+            this.status = "暂停"
           }
         })
       },
@@ -102,16 +118,36 @@
         })
       },
       goAddress(tCode) {
+        // window.location.href = protocol+ "//" + domain + "/detail" + tCode + "?template=" + tCode
         this.$router.push({
-          path: `detail${tCode}`,
+          path: `/detail${tCode}`,
           query: {
             templateCode: tCode
           }
         })
-
+      },
+      initSwiper(){
+         var swiperH = new Swiper('.swiper-container-h', {
+        resistanceRatio: 0,
+        slidesPerView: 'auto',
+        spaceBetween: 0,
+        // slidesPerView: 3,
+        autoplay: {
+          delay: 2500,
+          disableOnInteraction: true,
+        },
+         pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        },
+        loop: true,
+        autoHeight:false,
+      });
       }
     },
     mounted() {
+     
+      this.getList()
       // let routeQuery = this.$route.query
       // if(!localStorage.ctmRemberTerminal){
       //   if(routeQuery.license){
@@ -127,7 +163,7 @@
       //   }
       //   this.getList()
       // }
-      this.getList()
+
       // if(this.$route.query.template){
       //   this.goAddress(this.$route.query.template)
       // }
@@ -140,7 +176,8 @@
   // 1rem = 20px;
   .bg_contain {
     background-image: linear-gradient(-135deg, #131720 0%, #1E2643 100%);
-    height: 100vh;
+    min-height: 100vh;
+
     // padding-left: 120px;
     header {
       background-image: url(./bglight.png);
@@ -199,12 +236,14 @@
   .content-show {
     padding-left: 6rem;
     margin-top: 3.2rem;
-    .single-carousel{
+
+    .single-carousel {
       width: 36.2rem;
       height: 20.3rem;
       cursor: pointer;
     }
-     img {
+
+    img {
       width: 36.2rem;
       height: 20.3rem;
     }
@@ -219,18 +258,25 @@
       color: #FFFFFF;
       letter-spacing: 0;
     }
-    .swiper-pagination{
-      position: relative;
-      text-align: left;
-      margin-top:3.5rem; 
+    .swiper-container{
+      overflow-y: visible;
+      height: 24rem;
     }
+    .swiper-pagination {
+      // bottom: -3rem;
+      // position: relative;
+      text-align: left;
+      margin-top: 3.5rem;
+    }
+
     /deep/ .swiper-pagination-bullet {
       width: 1.6rem;
       height: .4rem;
       background: #404B6B;
       border-radius: 7.5px;
     }
-    /deep/ .swiper-pagination-bullet-active{
+
+    /deep/ .swiper-pagination-bullet-active {
       width: 3.1rem;
       background-image: linear-gradient(-270deg, #537BE6 2%, #94B1FF 100%);
       box-shadow: 0 5px 20px 0 #123FC0;
