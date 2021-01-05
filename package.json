@@ -16,7 +16,7 @@
     "dependencies": {
         "@tinymce/tinymce-vue": "^1.0.8",
         "amfe-flexible": "^2.2.1",
-        "axios": "^0.18.0",
+        "axios": "^0.21.1",
         "babel-preset-vue-app": "^2.0.0",
         "element-ui": "^2.4.6",
         "es6-promise": "^4.2.8",
